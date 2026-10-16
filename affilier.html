@@ -39,4 +39,102 @@
         .tree-node .label { font-size: 0.8rem; color: #A0AEC0; }
         .tree-arrow { font-size: 2rem; color: var(--wa-green); margin: 10px 0; }
         .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; max-width: 1100px; margin: 0 auto; }
-        .step-card { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); text-align: center; border: 1px solid var(--sbc-border); transition: all 0
+        .step-card { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); text-align: center; border: 1px solid var(--sbc-border); transition: all 0.4s ease; opacity: 0; transform: translateY(30px); }
+        .step-card.visible { opacity: 1; transform: translateY(0); }
+        .step-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1); }
+        .step-icon { width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 20px; background: var(--sbc-light-blue); color: var(--sbc-blue); }
+        .step-card h3 { font-size: 1.3rem; margin-bottom: 10px; color: var(--sbc-dark); }
+        .step-card p { color: var(--sbc-muted); font-size: 0.95rem; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid var(--sbc-border); display: flex; justify-content: space-around; padding: 10px 0; z-index: 1000; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); }
+        .bottom-nav a { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: var(--sbc-muted); font-size: 0.7rem; font-weight: 600; transition: all 0.3s ease; gap: 4px; }
+        .bottom-nav a.active { color: var(--wa-green); }
+        .bottom-nav a.active .nav-icon { background: var(--sbc-light-blue); color: var(--sbc-blue); }
+        .nav-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: all 0.3s ease; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 768px) { .hero h1 { font-size: 2rem; } .cta-container { flex-direction: column; width: 100%; align-items: center; } .btn-primary, .btn-secondary { width: 100%; text-align: center; justify-content: center; } }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="logo">Affiliation<span>SBC</span></div>
+        <a href="https://sniperbuisnesscenter.com/signup?affiliationCode=abdoula" class="btn-nav" target="_blank">S'inscrire</a>
+    </nav>
+    <header class="hero">
+        <h1>Gagne de l'argent en <span>invitant tes amis</span></h1>
+        <p>Notre système d'affiliation rémunéré sur 3 niveaux te permet de gagner des commissions sur chaque personne qui rejoint la plateforme grâce à toi.</p>
+        <div class="cta-container">
+            <a href="#explication" class="btn-secondary">Comment ça marche ?</a>
+            <a href="https://sniperbuisnesscenter.com/signup?affiliationCode=abdoula" class="btn-primary" target="_blank">🤝 Devenir Affilié</a>
+        </div>
+    </header>
+    <section class="affiliation-section">
+        <div class="section-title">
+            <h2>Ton <span>Arbre de Gains</span></h2>
+            <p>Invite tes amis et gagne sur 3 niveaux. Même si tu ne connais pas les filleuls de tes filleuls, tu es payé.</p>
+        </div>
+        <div class="tree-container">
+            <div class="tree-level">
+                <div class="tree-node" style="border-color: var(--wa-green);">
+                    <span class="gain">1000 FCFA</span>
+                    <span class="label">Niveau 1 : Ton filleul direct</span>
+                </div>
+            </div>
+            <div class="tree-arrow">⬇️</div>
+            <div class="tree-level">
+                <div class="tree-node">
+                    <span class="gain">500 FCFA</span>
+                    <span class="label">Niveau 2 : Filleul de ton filleul</span>
+                </div>
+            </div>
+            <div class="tree-arrow">⬇️</div>
+            <div class="tree-level">
+                <div class="tree-node">
+                    <span class="gain">250 FCFA</span>
+                    <span class="label">Niveau 3 : Filleul du niveau 2</span>
+                </div>
+            </div>
+            <p style="margin-top: 30px; color: #A0AEC0;">Ton succès commence ici. Plus tu partages, plus tu gagnes.</p>
+        </div>
+    </section>
+    <section class="explanation-section">
+        <div class="section-title">
+            <h2>Comment <span>commencer</span> ?</h2>
+            <p>3 étapes simples pour lancer ton business d'affiliation.</p>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0052FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </div>
+                <h3>1. Inscris-toi</h3>
+                <p>Crée ton compte SBC et choisis ton pack d'abonnement (Classique ou Ciblé).</p>
+            </div>
+            <div class="step-card">
+                <div class="step-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>
+                </div>
+                <h3>2. Partage ton lien</h3>
+                <p>Reçois ton lien d'affiliation unique et partage-le sur WhatsApp, Facebook et à tes amis.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#FFC107" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                </div>
+                <h3>3. Gagne des commissions</h3>
+                <p>Chaque fois qu'une personne s'inscrit via ton lien, tu reçois une commission directement dans ton compte.</p>
+            </div>
+        </div>
+    </section>
+    <div class="bottom-nav">
+        <a href="index.html"><div class="nav-icon">📱</div><span>Statuts</span></a>
+        <a href="affilier.html" class="active"><div class="nav-icon">🤝</div><span>Affilier</span></a>
+        <a href="shop.html"><div class="nav-icon">🛒</div><span>Shop</span></a>
+        <a href="contacts.html"><div class="nav-icon">📇</div><span>Contacts</span></a>
+    </div>
+    <script>
+        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+        const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); } }); }, observerOptions);
+        document.querySelectorAll('.step-card').forEach((el, index) => { el.style.transitionDelay = `${index * 0.1}s`; observer.observe(el); });
+    </script>
+</body>
+</html>
