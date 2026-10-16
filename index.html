@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SBC - Monétise tes Statuts WhatsApp | Rejoins la Révolution</title>
+    <title>Monétisation WhatsApp - Gagne de l'argent avec tes statuts</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         /* ================= VARIABLES & RESET ================= */
         :root {
             --sbc-blue: #0052FF;
-            --sbc-green: #25D366; /* Vert WhatsApp */
-            --sbc-dark-green: #128C7E;
-            --sbc-gold: #FFD700;
-            --sbc-dark: #0A0E17;
-            --sbc-card: rgba(255, 255, 255, 0.05);
-            --sbc-text: #F0F4F8;
-            --sbc-muted: #A0AEC0;
-            --sbc-border: rgba(255, 255, 255, 0.1);
+            --sbc-light-blue: #E6F0FF;
+            --wa-green: #25D366;
+            --wa-dark-green: #128C7E;
+            --sbc-gold: #FFC107;
+            --sbc-dark: #1A202C;
+            --sbc-gray: #F8F9FA;
+            --sbc-border: #E2E8F0;
+            --sbc-text: #2D3748;
+            --sbc-muted: #718096;
         }
 
         * {
@@ -28,26 +29,10 @@
         }
 
         body {
-            background-color: var(--sbc-dark);
+            background-color: #FFFFFF;
             color: var(--sbc-text);
             overflow-x: hidden;
             line-height: 1.6;
-        }
-
-        /* ================= BACKGROUND ANIMÉ ================= */
-        .bg-animation {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            z-index: -1;
-            background: radial-gradient(circle at 10% 20%, rgba(0, 82, 255, 0.15) 0%, transparent 40%),
-                        radial-gradient(circle at 90% 80%, rgba(37, 211, 102, 0.1) 0%, transparent 40%);
-            animation: bgPulse 15s infinite alternate;
-        }
-
-        @keyframes bgPulse {
-            0% { transform: scale(1); opacity: 0.8; }
-            100% { transform: scale(1.1); opacity: 1; }
         }
 
         /* ================= NAVBAR ================= */
@@ -55,64 +40,76 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 5%;
+            padding: 15px 5%;
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 100;
-            background: rgba(10, 14, 23, 0.85);
-            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--sbc-border);
             transition: all 0.3s ease;
         }
 
-        .logo { font-size: 1.8rem; font-weight: 800; letter-spacing: 2px; }
-        .logo span { color: var(--sbc-green); }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--sbc-blue); letter-spacing: 1px; }
+        .logo span { color: var(--wa-green); }
 
         .btn-nav {
-            background: var(--sbc-blue);
+            background: var(--wa-green);
             color: white;
             padding: 10px 24px;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 82, 255, 0.4);
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .btn-nav:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 82, 255, 0.6);
-            background: #0043D1;
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+            background: #1EBE5A;
         }
 
         /* ================= HERO SECTION ================= */
         .hero {
-            min-height: 100vh;
+            min-height: 90vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
             padding: 120px 20px 60px;
+            background: linear-gradient(135deg, var(--sbc-light-blue) 0%, #FFFFFF 100%);
             position: relative;
         }
 
+        .hero-badge {
+            background: var(--sbc-blue);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
         .hero h1 {
-            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-size: clamp(2.5rem, 5vw, 4rem);
             font-weight: 800;
             line-height: 1.1;
             margin-bottom: 20px;
-            background: linear-gradient(90deg, #FFFFFF, #A0AEC0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--sbc-dark);
             animation: fadeInUp 1s ease-out;
         }
 
         .hero h1 span {
-            background: linear-gradient(90deg, var(--sbc-green), var(--sbc-gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--wa-green);
         }
 
         .hero p {
@@ -130,7 +127,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--sbc-blue), #00A3FF);
+            background: var(--wa-green);
             color: white;
             padding: 16px 40px;
             border-radius: 50px;
@@ -140,55 +137,48 @@
             border: none;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(0, 82, 255, 0.4);
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .btn-primary::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: all 0.5s ease;
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(37, 211, 102, 0.6);
+            background: #1EBE5A;
         }
-
-        .btn-primary:hover::after { left: 100%; }
-        .btn-primary:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 15px 40px rgba(0, 82, 255, 0.6); }
 
         .btn-secondary {
-            background: transparent;
-            color: var(--sbc-text);
+            background: white;
+            color: var(--sbc-blue);
             padding: 16px 40px;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
             font-size: 1.1rem;
-            border: 2px solid var(--sbc-border);
+            border: 2px solid var(--sbc-blue);
             transition: all 0.3s ease;
         }
 
         .btn-secondary:hover {
-            border-color: var(--sbc-green);
-            color: var(--sbc-green);
-            background: rgba(37, 211, 102, 0.05);
+            background: var(--sbc-light-blue);
         }
 
         /* ================= SECTIONS COMMUNES ================= */
-        section { padding: 100px 5%; position: relative; }
+        section { padding: 80px 5%; position: relative; }
 
-        .section-title { text-align: center; margin-bottom: 60px; }
-        .section-title h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 15px; }
-        .section-title h2 span { color: var(--sbc-green); }
+        .section-title { text-align: center; margin-bottom: 50px; }
+        .section-title h2 { font-size: 2.2rem; font-weight: 700; margin-bottom: 15px; color: var(--sbc-dark); }
+        .section-title h2 span { color: var(--sbc-blue); }
         .section-title p { color: var(--sbc-muted); max-width: 600px; margin: 0 auto; }
 
-        /* ================= SECTION PREUVE VISUELLE (LE CŒUR DE LA VENTE) ================= */
-        .visual-proof-section {
-            background: linear-gradient(180deg, var(--sbc-dark) 0%, #0D1424 100%);
+        /* ================= SECTION EXPLICATION (Schéma) ================= */
+        .explanation-section {
+            background: var(--sbc-gray);
         }
 
-        .visual-grid {
+        .explanation-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
@@ -196,74 +186,143 @@
             margin: 0 auto;
         }
 
-        .visual-card {
-            background: var(--sbc-card);
-            border: 1px solid var(--sbc-border);
-            border-radius: 24px;
+        .explanation-card {
+            background: white;
+            border-radius: 20px;
             padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border: 1px solid var(--sbc-border);
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .explanation-card.visible { opacity: 1; transform: translateY(0); }
+        .explanation-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1); }
+
+        .step-icon {
+            width: 70px; height: 70px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 20px;
+            background: var(--sbc-light-blue);
+            color: var(--sbc-blue);
+        }
+
+        .explanation-card h3 { font-size: 1.3rem; margin-bottom: 10px; color: var(--sbc-dark); }
+        .explanation-card p { color: var(--sbc-muted); font-size: 0.95rem; }
+
+        /* ================= SECTION PREUVE (Chiffres et Graphiques) ================= */
+        .proof-section {
+            background: white;
+        }
+
+        .proof-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .proof-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid var(--sbc-border);
             text-align: center;
             transition: all 0.4s ease;
             opacity: 0;
             transform: translateY(30px);
         }
 
-        .visual-card.visible { opacity: 1; transform: translateY(0); }
-        .visual-card:hover { border-color: var(--sbc-green); transform: translateY(-5px); }
+        .proof-card.visible { opacity: 1; transform: translateY(0); }
+        .proof-card:hover { border-color: var(--wa-green); transform: translateY(-5px); }
 
-        /* Simulation des captures d'écran */
-        .phone-mockup {
-            background: #000;
-            border-radius: 20px;
-            padding: 15px;
-            border: 2px solid #333;
+        /* Simulation de graphique */
+        .chart-container {
+            height: 120px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            gap: 5px;
             margin-bottom: 20px;
-            position: relative;
-            overflow: hidden;
+            padding: 0 10px;
         }
 
-        .phone-mockup .status-bar {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.7rem;
-            color: #888;
-            margin-bottom: 10px;
+        .chart-bar {
+            width: 12%;
+            background: var(--sbc-blue);
+            border-radius: 5px 5px 0 0;
+            transition: height 1s ease;
         }
 
-        .phone-mockup .whatsapp-status {
-            background: #075E54; /* Vert WhatsApp foncé */
-            border-radius: 10px;
-            padding: 10px;
-            text-align: left;
-        }
+        .chart-bar.green { background: var(--wa-green); }
+        .chart-bar.gold { background: var(--sbc-gold); }
 
-        .phone-mockup .whatsapp-status .stat-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            font-size: 0.8rem;
-        }
-
-        .phone-mockup .whatsapp-status .stat-item:last-child { border-bottom: none; }
-        .phone-mockup .whatsapp-status .views { color: var(--sbc-green); font-weight: bold; }
-
-        .gain-highlight {
-            background: linear-gradient(135deg, var(--sbc-green), var(--sbc-dark-green));
-            color: white;
-            padding: 15px;
-            border-radius: 12px;
+        .proof-value {
+            font-size: 2.2rem;
             font-weight: 800;
-            font-size: 1.5rem;
-            margin-top: 15px;
-            display: inline-block;
+            color: var(--sbc-dark);
         }
 
-        .gain-highlight span { font-size: 1rem; font-weight: 400; display: block; }
+        .proof-value span { font-size: 1rem; font-weight: 400; color: var(--sbc-muted); display: block; }
 
-        /* ================= SECTION ARBRE DE PARRAINAGE ================= */
+        /* ================= SECTION GAINS DÉTAILLÉS ================= */
+        .gains-section {
+            background: linear-gradient(135deg, #FFFFFF 0%, var(--sbc-light-blue) 100%);
+        }
+
+        .gains-table {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--sbc-border);
+        }
+
+        .gains-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .gains-table th, .gains-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--sbc-border);
+        }
+
+        .gains-table th {
+            color: var(--sbc-blue);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        .gains-table td {
+            color: var(--sbc-dark);
+            font-weight: 500;
+        }
+
+        .gains-table .highlight {
+            color: var(--wa-green);
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        /* ================= SECTION PARRAINAGE (Schéma) ================= */
         .affiliation-section {
             background: var(--sbc-dark);
+            color: white;
         }
+
+        .affiliation-section .section-title h2 { color: white; }
+        .affiliation-section .section-title p { color: #A0AEC0; }
 
         .tree-container {
             max-width: 800px;
@@ -280,13 +339,16 @@
         }
 
         .tree-node {
-            background: var(--sbc-card);
-            border: 1px solid var(--sbc-border);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 12px;
             padding: 15px 25px;
             text-align: center;
             position: relative;
+            transition: all 0.3s ease;
         }
+
+        .tree-node:hover { background: rgba(37, 211, 102, 0.2); border-color: var(--wa-green); }
 
         .tree-node .gain {
             color: var(--sbc-gold);
@@ -297,16 +359,20 @@
 
         .tree-node .label {
             font-size: 0.8rem;
-            color: var(--sbc-muted);
+            color: #A0AEC0;
         }
 
         .tree-arrow {
             font-size: 2rem;
-            color: var(--sbc-blue);
+            color: var(--wa-green);
             margin: 10px 0;
         }
 
-        /* ================= SECTION PACKS (PRICING) ================= */
+        /* ================= SECTION PACKS (Pricing) ================= */
+        .pricing-section {
+            background: var(--sbc-gray);
+        }
+
         .pricing-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -316,21 +382,22 @@
         }
 
         .pricing-card {
-            background: var(--sbc-card);
-            border: 1px solid var(--sbc-border);
+            background: white;
             border-radius: 24px;
             padding: 40px 30px;
             position: relative;
             transition: all 0.4s ease;
             opacity: 0;
             transform: translateY(30px);
+            border: 1px solid var(--sbc-border);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
         }
 
         .pricing-card.visible { opacity: 1; transform: translateY(0); }
 
         .pricing-card.popular {
-            border: 2px solid var(--sbc-green);
-            background: linear-gradient(180deg, rgba(37, 211, 102, 0.05), transparent);
+            border: 2px solid var(--wa-green);
+            box-shadow: 0 15px 40px rgba(37, 211, 102, 0.15);
             transform: scale(1.05);
         }
 
@@ -340,8 +407,8 @@
             position: absolute;
             top: -15px; left: 50%;
             transform: translateX(-50%);
-            background: var(--sbc-green);
-            color: #000;
+            background: var(--wa-green);
+            color: white;
             padding: 5px 20px;
             border-radius: 50px;
             font-weight: 700;
@@ -349,8 +416,8 @@
             text-transform: uppercase;
         }
 
-        .pricing-card h3 { font-size: 1.6rem; margin-bottom: 10px; }
-        .pricing-card .price { font-size: 2.5rem; font-weight: 800; margin-bottom: 20px; }
+        .pricing-card h3 { font-size: 1.6rem; margin-bottom: 10px; color: var(--sbc-dark); }
+        .pricing-card .price { font-size: 2.5rem; font-weight: 800; margin-bottom: 20px; color: var(--sbc-blue); }
         .pricing-card .price span { font-size: 1rem; font-weight: 400; color: var(--sbc-muted); }
 
         .pricing-features { list-style: none; margin-bottom: 30px; }
@@ -359,14 +426,19 @@
             align-items: center;
             gap: 10px;
             margin-bottom: 12px;
-            color: var(--sbc-muted);
+            color: var(--sbc-text);
             font-size: 0.95rem;
         }
 
         .pricing-features li::before {
             content: '✓';
-            color: var(--sbc-green);
+            color: var(--wa-green);
             font-weight: 800;
+            background: var(--sbc-light-blue);
+            width: 20px; height: 20px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+            font-size: 0.7rem;
         }
 
         .btn-pricing {
@@ -387,22 +459,40 @@
         .btn-pricing.outline:hover { border-color: var(--sbc-blue); color: var(--sbc-blue); }
 
         .btn-pricing.solid {
-            background: var(--sbc-blue);
+            background: var(--wa-green);
             color: white;
-            box-shadow: 0 4px 15px rgba(0, 82, 255, 0.4);
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
         }
 
-        .btn-pricing.solid:hover { background: #0043D1; transform: translateY(-2px); }
+        .btn-pricing.solid:hover { background: #1EBE5A; transform: translateY(-2px); }
 
         /* ================= FOOTER CTA ================= */
         .footer-cta {
             text-align: center;
-            padding: 120px 20px;
-            background: radial-gradient(circle at center, rgba(37, 211, 102, 0.1) 0%, transparent 70%);
+            padding: 80px 20px;
+            background: linear-gradient(135deg, var(--wa-green) 0%, var(--wa-dark-green) 100%);
+            color: white;
         }
 
         .footer-cta h2 { font-size: 2.5rem; margin-bottom: 20px; }
-        .footer-cta p { color: var(--sbc-muted); margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .footer-cta p { margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto; opacity: 0.9; }
+
+        .btn-footer {
+            background: white;
+            color: var(--wa-dark-green);
+            padding: 18px 50px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-footer:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3); }
 
         /* ================= ANIMATIONS ================= */
         @keyframes fadeInUp {
@@ -415,180 +505,155 @@
             nav { padding: 15px 5%; }
             .hero h1 { font-size: 2.2rem; }
             .cta-container { flex-direction: column; width: 100%; align-items: center; }
-            .btn-primary, .btn-secondary { width: 100%; text-align: center; }
+            .btn-primary, .btn-secondary { width: 100%; text-align: center; justify-content: center; }
             section { padding: 60px 5%; }
             .section-title h2 { font-size: 1.8rem; }
             .pricing-card.popular { transform: scale(1); }
             .pricing-card.popular:hover { transform: scale(1); }
             .tree-level { flex-direction: column; align-items: center; }
+            .gains-table th, .gains-table td { padding: 10px; font-size: 0.85rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- FOND ANIMÉ -->
-    <div class="bg-animation"></div>
-
     <!-- NAVBAR -->
     <nav>
-        <div class="logo">SBC<span>.</span></div>
-        <a href="https://sniperbuisnesscenter.com/signup?affiliationCode=abdoula" class="btn-nav" target="_blank">S'inscrire</a>
+        <div class="logo">Monétisation<span>WhatsApp</span></div>
+        <a href="https://sniperbuisnesscenter.com/signup?affiliationCode=abdoula" class="btn-nav" target="_blank">
+            <span>📲</span> Rejoindre
+        </a>
     </nav>
 
     <!-- HERO SECTION -->
     <header class="hero">
-        <h1>Monétise tes <span>Statuts WhatsApp</span> dès aujourd'hui</h1>
-        <p>Transforme ton audience en une véritable source de revenus. Rejoins la SBC et commence à gagner de l'argent grâce à tes vues, ton réseau et tes compétences.</p>
+        <div class="hero-badge">🚀 NOUVELLE OPPORTUNITÉ</div>
+        <h1>Transforme tes <span>Statuts WhatsApp</span> en Machine à Cash</h1>
+        <p>Tes vues peuvent devenir une véritable source de revenus. Découvre comment monétiser ton audience dès aujourd'hui, simplement et en toute sécurité.</p>
         <div class="cta-container">
-            <a href="#packs" class="btn-primary">Découvrir les Packs</a>
-            <a href="https://sniperbuisnesscenter.com/signup?affiliationCode=abdoula" class="btn-secondary" target="_blank">S'inscrire Maintenant</a>
+            <a href="#explication" class="btn-secondary">Comment ça marche ?</a>
+            <a href="https://sniperbuisnesscenter.com/signup?affiliationCode=abdoula" class="btn-primary" target="_blank">
+                <span>💰</span> Commencer à gagner
+            </a>
         </div>
     </header>
 
-    <!-- SECTION PREUVE VISUELLE (Ce que tu vois en premier) -->
-    <section class="visual-proof-section">
+    <!-- SECTION EXPLICATION (Schéma pas à pas) -->
+    <section id="explication" class="explanation-section">
         <div class="section-title">
-            <h2>Tes vues peuvent te <span>rapporter gros</span></h2>
-            <p>Voici exactement ce que tu verras dans ton tableau de bord SBC.</p>
+            <h2>Comment ça marche ? <span>En 3 étapes simples</span></h2>
+            <p>Pas besoin d'être un expert. Tu publies, tu accumules des vues, et tu es payé.</p>
         </div>
-        <div class="visual-grid">
-            <!-- Carte 1 : Simulation Statut WhatsApp -->
-            <div class="visual-card">
-                <div class="phone-mockup">
-                    <div class="status-bar">
-                        <span>09:45</span>
-                        <span>📶 🔋</span>
-                    </div>
-                    <div class="whatsapp-status">
-                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                            <div style="width: 30px; height: 30px; border-radius: 50%; background: var(--sbc-blue);"></div>
-                            <div>
-                                <strong style="font-size: 0.8rem;">Mon statut</strong>
-                                <div style="font-size: 0.6rem; color: #aaa;">Aujourd'hui, 09:45</div>
-                            </div>
-                        </div>
-                        <div class="stat-item">
-                            <span>Nouveau produit</span>
-                            <span class="views">2 500 vues</span>
-                        </div>
-                        <div class="stat-item">
-                            <span>Promo exclusive</span>
-                            <span class="views">3 800 vues</span>
-                        </div>
-                        <div class="stat-item">
-                            <span>Coulisses du projet</span>
-                            <span class="views">1 900 vues</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="gain-highlight">
-                    1 000 vues = 1 750 FCFA
-                    <span>Plus de vues, plus de gains !</span>
-                </div>
+        <div class="explanation-grid">
+            <div class="explanation-card">
+                <div class="step-icon">📱</div>
+                <h3>1. Publie tes statuts</h3>
+                <p>Continue à publier tes statuts WhatsApp comme d'habitude. Que ce soit des photos, des vidéos ou des textes, chaque vue compte.</p>
             </div>
-
-            <!-- Carte 2 : Simulation Portefeuille -->
-            <div class="visual-card">
-                <div class="phone-mockup">
-                    <div class="status-bar">
-                        <span>12:17</span>
-                        <span>📶 🔋</span>
-                    </div>
-                    <div style="background: linear-gradient(135deg, var(--sbc-green), var(--sbc-dark-green)); border-radius: 15px; padding: 20px; text-align: center; margin-bottom: 15px;">
-                        <div style="font-size: 0.8rem; opacity: 0.8;">Solde total</div>
-                        <div style="font-size: 2rem; font-weight: 800;">138 858 F</div>
-                        <div style="font-size: 0.7rem; opacity: 0.8;">Bénéfice: 187 064 F</div>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; gap: 10px;">
-                        <div style="background: var(--sbc-blue); padding: 10px; border-radius: 10px; flex: 1; text-align: center; font-size: 0.8rem;">Dépôt</div>
-                        <div style="background: var(--sbc-gold); color: #000; padding: 10px; border-radius: 10px; flex: 1; text-align: center; font-size: 0.8rem; font-weight: bold;">Retrait</div>
-                    </div>
-                </div>
-                <div class="gain-highlight" style="background: linear-gradient(135deg, var(--sbc-gold), #FFA500); color: #000;">
-                    130 709 F
-                    <span>Gagnés en moins de 30 jours</span>
-                </div>
+            <div class="explanation-card">
+                <div class="step-icon">👁️</div>
+                <h3>2. Accumule des vues</h3>
+                <p>Plus ton réseau est grand, plus tu as de vues. La SBC te connecte à un réseau de plus de 30 000 contacts ciblés pour booster tes vues.</p>
             </div>
-
-            <!-- Carte 3 : Simulation Gains Quotidiens -->
-            <div class="visual-card">
-                <div class="phone-mockup">
-                    <div class="status-bar">
-                        <span>16:30</span>
-                        <span>📶 🔋</span>
-                    </div>
-                    <div style="background: #1a1a1a; border-radius: 15px; padding: 15px;">
-                        <div style="font-size: 0.8rem; color: #aaa; margin-bottom: 10px;">Résumé des transactions</div>
-                        <div style="display: flex; align-items: flex-end; justify-content: space-between; height: 100px; gap: 5px;">
-                            <div style="background: var(--sbc-blue); width: 15%; height: 30%; border-radius: 5px;"></div>
-                            <div style="background: var(--sbc-blue); width: 15%; height: 50%; border-radius: 5px;"></div>
-                            <div style="background: var(--sbc-blue); width: 15%; height: 40%; border-radius: 5px;"></div>
-                            <div style="background: var(--sbc-green); width: 15%; height: 80%; border-radius: 5px;"></div>
-                            <div style="background: var(--sbc-green); width: 15%; height: 100%; border-radius: 5px;"></div>
-                            <div style="background: var(--sbc-blue); width: 15%; height: 60%; border-radius: 5px;"></div>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 0.6rem; color: #888; margin-top: 5px;">
-                            <span>Lun</span><span>Mar</span><span>Mer</span><span>Jeu</span><span>Ven</span><span>Sam</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="gain-highlight">
-                    5 000 - 10 000 FCFA
-                    <span>Possibilité de gains par jour</span>
-                </div>
+            <div class="explanation-card">
+                <div class="step-icon">💸</div>
+                <h3>3. Sois payé</h3>
+                <p>Chaque vue est convertie en FCFA. Tu peux retirer tes gains directement dans ton portefeuille SBC, par Mobile Money ou Crypto.</p>
             </div>
         </div>
     </section>
 
-    <!-- SECTION SERVICES (Ce que tu gagnes) -->
-    <section id="services">
+    <!-- SECTION PREUVE (Chiffres et Graphiques) -->
+    <section class="proof-section">
         <div class="section-title">
-            <h2>Voici tout ce que tu obtiens avec <span>SBC</span></h2>
-            <p>Une plateforme complète pour apprendre, vendre et monétiser ton réseau.</p>
+            <h2>Voici ce que tu peux <span>gagner</span></h2>
+            <p>Des chiffres réels, basés sur les performances de nos membres.</p>
         </div>
-        <div class="services-grid">
-            <div class="service-card">
-                <div class="service-icon">📢</div>
-                <h3>Visibilité Maximale</h3>
-                <p>Partage ton flyer ou affiche publicitaire dans nos groupes chaque samedi et touche des milliers de clients potentiels.</p>
+        <div class="proof-grid">
+            <div class="proof-card">
+                <div class="chart-container">
+                    <div class="chart-bar" style="height: 30%;"></div>
+                    <div class="chart-bar" style="height: 50%;"></div>
+                    <div class="chart-bar green" style="height: 80%;"></div>
+                    <div class="chart-bar green" style="height: 100%;"></div>
+                </div>
+                <div class="proof-value">1 000 vues <span>= 1 750 FCFA</span></div>
+                <p style="color: var(--sbc-muted); font-size: 0.9rem; margin-top: 10px;">Gain estimé pour 1 000 vues sur tes statuts.</p>
             </div>
-            <div class="service-card">
-                <div class="service-icon">📱</div>
-                <h3>Accès à un Réseau Énorme</h3>
-                <p>Profite de plus de 30 000 contacts WhatsApp ciblés qui verront tes statuts et à qui tu pourras proposer tes produits.</p>
+            <div class="proof-card">
+                <div class="chart-container">
+                    <div class="chart-bar gold" style="height: 40%;"></div>
+                    <div class="chart-bar gold" style="height: 70%;"></div>
+                    <div class="chart-bar gold" style="height: 90%;"></div>
+                    <div class="chart-bar gold" style="height: 100%;"></div>
+                </div>
+                <div class="proof-value">5 000 - 10 000 F <span>Par jour</span></div>
+                <p style="color: var(--sbc-muted); font-size: 0.9rem; margin-top: 10px;">Possibilité de gains quotidiens avec un réseau actif.</p>
             </div>
-            <div class="service-card">
-                <div class="service-icon">🛒</div>
-                <h3>Marketplace Dédiée</h3>
-                <p>Mets en avant tes produits et services sur notre plateforme SBC Shop. 234 boutiques membres t'attendent déjà.</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon">🎓</div>
-                <h3>Formations Exclusives</h3>
-                <p>Bénéficie de 5 formations complètes (Marketing 360, Trading, Achat en Chine, Art Oratoire, Bots WhatsApp) avec un suivi personnalisé chaque semaine sur Google Meet.</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon">💰</div>
-                <h3>Gagne de l'Argent Facilement</h3>
-                <p>Avec notre système d'affiliation rémunéré sur 3 niveaux. Tu invites quelqu'un, tu reçois 1000 FCFA directement dans ton compte.</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon">🌍</div>
-                <h3>Une Entreprise Légale</h3>
-                <p>SBC est une entreprise enregistrée au Cameroun et au Bénin. Rejoins une structure solide et sérieuse.</p>
+            <div class="proof-card">
+                <div class="chart-container">
+                    <div class="chart-bar" style="height: 20%;"></div>
+                    <div class="chart-bar" style="height: 40%;"></div>
+                    <div class="chart-bar green" style="height: 70%;"></div>
+                    <div class="chart-bar green" style="height: 95%;"></div>
+                </div>
+                <div class="proof-value">138 858 F <span>Solde total d'un membre</span></div>
+                <p style="color: var(--sbc-muted); font-size: 0.9rem; margin-top: 10px;">Exemple de gains cumulés par un utilisateur actif.</p>
             </div>
         </div>
     </section>
 
-    <!-- SECTION PARRAINAGE (Arbre de gains) -->
+    <!-- SECTION GAINS DÉTAILLÉS (Tableau) -->
+    <section class="gains-section">
+        <div class="section-title">
+            <h2>Détail de tes <span>Gains</span></h2>
+            <p>Voici exactement combien tu peux gagner en fonction de ton pack et de ton audience.</p>
+        </div>
+        <div class="gains-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre de vues</th>
+                        <th>Gain avec Pack Classique</th>
+                        <th>Gain avec Pack Ciblé</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>500 vues</td>
+                        <td>875 FCFA</td>
+                        <td class="highlight">1 000 FCFA</td>
+                    </tr>
+                    <tr>
+                        <td>1 000 vues</td>
+                        <td>1 750 FCFA</td>
+                        <td class="highlight">2 000 FCFA</td>
+                    </tr>
+                    <tr>
+                        <td>2 000 vues</td>
+                        <td>3 500 FCFA</td>
+                        <td class="highlight">4 000 FCFA</td>
+                    </tr>
+                    <tr>
+                        <td>5 000 vues</td>
+                        <td>8 750 FCFA</td>
+                        <td class="highlight">10 000 FCFA</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="text-align: center; margin-top: 20px; color: var(--sbc-muted); font-size: 0.9rem;">Plus tu as de vues, plus tu gagnes. Les gains sont calculés par vue unique.</p>
+        </div>
+    </section>
+
+    <!-- SECTION PARRAINAGE (Schéma) -->
     <section class="affiliation-section">
         <div class="section-title">
-            <h2>Gagne de l'argent avec le <span>Parrainage</span></h2>
+            <h2>Gagne encore plus avec le <span>Parrainage</span></h2>
             <p>Invite tes amis et gagne sur 3 niveaux. Même si tu ne connais pas les filleuls de tes filleuls, tu es payé.</p>
         </div>
         <div class="tree-container">
             <div class="tree-level">
-                <div class="tree-node" style="border-color: var(--sbc-green);">
+                <div class="tree-node" style="border-color: var(--wa-green);">
                     <span class="gain">1000 FCFA</span>
                     <span class="label">Niveau 1 : Ton filleul direct</span>
                 </div>
@@ -607,12 +672,12 @@
                     <span class="label">Niveau 3 : Filleul du niveau 2</span>
                 </div>
             </div>
-            <p style="margin-top: 30px; color: var(--sbc-muted);">Ton succès commence ici. Plus tu partages, plus tu gagnes.</p>
+            <p style="margin-top: 30px; color: #A0AEC0;">Ton succès commence ici. Plus tu partages, plus tu gagnes.</p>
         </div>
     </section>
 
     <!-- SECTION PACKS (Pricing) -->
-    <section id="packs">
+    <section id="packs" class="pricing-section">
         <div class="section-title">
             <h2>Choisis ton <span>Pack</span> et commence à gagner</h2>
             <p>Un abonnement unique et à vie. Pas de frais cachés.</p>
@@ -624,12 +689,12 @@
                 <div class="price">2 150 <span>FCFA · à vie</span></div>
                 <p style="color: var(--sbc-muted); font-size: 0.9rem; margin-bottom: 20px;">Tout pour démarrer et gagner dès tes premiers statuts.</p>
                 <ul class="pricing-features">
-                    <li><strong>Gagne jusqu'à 1,75 FCFA par vue</strong> WhatsApp</li>
+                    <li><strong>Gagne jusqu'à 1,75 FCFA par vue</strong></li>
                     <li>1 000 vues = 1 750 FCFA pour toi</li>
-                    <li>Possibilité de gagner entre 5 000 et 10 000 FCFA par jour</li>
+                    <li>Gains possibles : 5 000 à 10 000 FCFA/jour</li>
                     <li>Vente de produits digitaux</li>
                     <li>Contacts WhatsApp ciblés par pays</li>
-                    <li>Accès à la marketplace SBC</li>
+                    <li>Accès à la marketplace</li>
                     <li>5 formations incluses (Trading, Achat en Chine, Art Oratoire, Marketing, Bots WhatsApp)</li>
                 </ul>
                 <a href="https://sniperbuisnesscenter.com/signup?affiliationCode=abdoula" class="btn-pricing outline" target="_blank">Choisir le Pack Classique</a>
@@ -642,7 +707,7 @@
                 <div class="price">5 300 <span>FCFA · payé</span></div>
                 <p style="color: var(--sbc-muted); font-size: 0.9rem; margin-bottom: 20px;">Le meilleur tarif par vue et un ciblage précis de vos contacts.</p>
                 <ul class="pricing-features">
-                    <li><strong>Gagne jusqu'à 2 FCFA par vue</strong> WhatsApp</li>
+                    <li><strong>Gagne jusqu'à 2 FCFA par vue</strong></li>
                     <li>1 000 vues = 2 000 FCFA pour toi</li>
                     <li>Tout le Pack Classique, et en plus :</li>
                     <li><strong>Ciblage avancé :</strong> pays, sexe, âge, profession, ville et centres d'intérêt</li>
@@ -655,10 +720,12 @@
 
     <!-- FOOTER CTA -->
     <section class="footer-cta" id="inscription">
-        <h2>Prêt à transformer ton téléphone en Machine à Cash ?</h2>
-        <p>Ne reste pas spectateur. Rejoins la SBC aujourd'hui et commence à bâtir ton empire digital avec des outils professionnels.</p>
-        <a href="https://sniperbuisnesscenter.com/signup?affiliationCode=abdoula" class="btn-primary" style="font-size: 1.2rem; padding: 20px 50px;" target="_blank">S'INSCRIRE MAINTENANT</a>
-        <p style="margin-top: 20px; font-size: 0.8rem; color: #666;">Paiement unique. Accès à vie. Communauté active.</p>
+        <h2>Prêt à monétiser tes statuts WhatsApp ?</h2>
+        <p>Rejoins des milliers d'utilisateurs qui transforment déjà leur téléphone en machine à cash. Ne reste pas spectateur.</p>
+        <a href="https://sniperbuisnesscenter.com/signup?affiliationCode=abdoula" class="btn-footer" target="_blank">
+            <span>📲</span> S'INSCRIRE MAINTENANT
+        </a>
+        <p style="margin-top: 20px; font-size: 0.8rem; opacity: 0.7;">Paiement unique. Accès à vie. Communauté active.</p>
     </section>
 
     <!-- SCRIPT POUR LES ANIMATIONS AU DÉFILEMENT -->
@@ -678,7 +745,7 @@
         }, observerOptions);
 
         // Sélectionner tous les éléments à animer
-        const elementsToAnimate = document.querySelectorAll('.visual-card, .service-card, .pricing-card, .step');
+        const elementsToAnimate = document.querySelectorAll('.explanation-card, .proof-card, .pricing-card');
         
         elementsToAnimate.forEach((el, index) => {
             // Ajouter un délai progressif pour un effet cascade
@@ -686,15 +753,25 @@
             observer.observe(el);
         });
 
+        // Animation des barres de graphique
+        const chartBars = document.querySelectorAll('.chart-bar');
+        chartBars.forEach(bar => {
+            const height = bar.style.height;
+            bar.style.height = '0%';
+            setTimeout(() => {
+                bar.style.height = height;
+            }, 500);
+        });
+
         // Animation de la navbar au défilement
         window.addEventListener('scroll', () => {
             const nav = document.querySelector('nav');
             if (window.scrollY > 50) {
-                nav.style.padding = '15px 5%';
-                nav.style.background = 'rgba(10, 14, 23, 0.95)';
+                nav.style.padding = '10px 5%';
+                nav.style.boxShadow = '0 4px 20px rgba(0,0,0,0.1)';
             } else {
-                nav.style.padding = '20px 5%';
-                nav.style.background = 'rgba(10, 14, 23, 0.85)';
+                nav.style.padding = '15px 5%';
+                nav.style.boxShadow = 'none';
             }
         });
     </script>
