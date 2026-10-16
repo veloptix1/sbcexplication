@@ -1,21 +1,22 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SBC - Sniper Business Center | Votre Écosystème de Revenus</title>
+    <title>SBC - Transformez votre téléphone en Machine à Cash</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         /* ================= VARIABLES & RESET ================= */
         :root {
             --primary-blue: #0052FF;
-            --primary-green: #8CC63F; /* Le vert de votre solde */
+            --primary-green: #25D366; /* Vert WhatsApp / Argent */
+            --accent-green: #8CC63F;
             --dark-bg: #0A0E17;
             --card-bg: rgba(255, 255, 255, 0.05);
             --text-light: #F0F4F8;
             --text-muted: #A0AEC0;
             --glass-border: rgba(255, 255, 255, 0.1);
+            --gradient-gold: linear-gradient(135deg, #FFD700, #FFA500);
         }
 
         * {
@@ -36,13 +37,11 @@
         /* ================= BACKGROUND ANIMÉ ================= */
         .bg-animation {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
             z-index: -1;
             background: radial-gradient(circle at 10% 20%, rgba(0, 82, 255, 0.15) 0%, transparent 40%),
-                        radial-gradient(circle at 90% 80%, rgba(140, 198, 63, 0.1) 0%, transparent 40%);
+                        radial-gradient(circle at 90% 80%, rgba(37, 211, 102, 0.1) 0%, transparent 40%);
             animation: bgPulse 15s infinite alternate;
         }
 
@@ -61,22 +60,14 @@
             width: 100%;
             top: 0;
             z-index: 100;
-            background: rgba(10, 14, 23, 0.8);
+            background: rgba(10, 14, 23, 0.85);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--glass-border);
             transition: all 0.3s ease;
         }
 
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            color: var(--text-light);
-        }
-
-        .logo span {
-            color: var(--primary-green);
-        }
+        .logo { font-size: 1.8rem; font-weight: 800; letter-spacing: 2px; }
+        .logo span { color: var(--accent-green); }
 
         .btn-nav {
             background: var(--primary-blue);
@@ -119,7 +110,7 @@
         }
 
         .hero h1 span {
-            background: linear-gradient(90deg, var(--primary-green), #B5E655);
+            background: linear-gradient(90deg, var(--primary-green), var(--accent-green));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -163,14 +154,8 @@
             transition: all 0.5s ease;
         }
 
-        .btn-primary:hover::after {
-            left: 100%;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 15px 40px rgba(0, 82, 255, 0.6);
-        }
+        .btn-primary:hover::after { left: 100%; }
+        .btn-primary:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 15px 40px rgba(0, 82, 255, 0.6); }
 
         .btn-secondary {
             background: transparent;
@@ -187,35 +172,16 @@
         .btn-secondary:hover {
             border-color: var(--primary-green);
             color: var(--primary-green);
-            background: rgba(140, 198, 63, 0.05);
+            background: rgba(37, 211, 102, 0.05);
         }
 
         /* ================= SECTIONS COMMUNES ================= */
-        section {
-            padding: 100px 5%;
-            position: relative;
-        }
+        section { padding: 100px 5%; position: relative; }
 
-        .section-title {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .section-title h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        .section-title h2 span {
-            color: var(--primary-green);
-        }
-
-        .section-title p {
-            color: var(--text-muted);
-            max-width: 600px;
-            margin: 0 auto;
-        }
+        .section-title { text-align: center; margin-bottom: 60px; }
+        .section-title h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 15px; }
+        .section-title h2 span { color: var(--accent-green); }
+        .section-title p { color: var(--text-muted); max-width: 600px; margin: 0 auto; }
 
         /* ================= GRILLE DE SERVICES ================= */
         .services-grid {
@@ -239,11 +205,7 @@
             overflow: hidden;
         }
 
-        .service-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
+        .service-card.visible { opacity: 1; transform: translateY(0); }
         .service-card:hover {
             transform: translateY(-10px) scale(1.02);
             border-color: rgba(140, 198, 63, 0.4);
@@ -251,78 +213,139 @@
         }
 
         .service-icon {
-            width: 60px;
-            height: 60px;
+            width: 60px; height: 60px;
             border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             font-size: 1.8rem;
             margin-bottom: 25px;
             background: rgba(0, 82, 255, 0.1);
             color: var(--primary-blue);
         }
 
-        .service-card:nth-child(even) .service-icon {
-            background: rgba(140, 198, 63, 0.1);
-            color: var(--primary-green);
-        }
+        .service-card:nth-child(even) .service-icon { background: rgba(37, 211, 102, 0.1); color: var(--primary-green); }
 
-        .service-card h3 {
-            font-size: 1.4rem;
-            margin-bottom: 15px;
-        }
+        .service-card h3 { font-size: 1.4rem; margin-bottom: 15px; }
+        .service-card p { color: var(--text-muted); font-size: 0.95rem; }
 
-        .service-card p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        /* ================= SECTION TELEGRAM ================= */
-        .telegram-section {
+        /* ================= SECTION PREUVE SOCIALE ================= */
+        .proof-section {
             background: linear-gradient(180deg, var(--dark-bg) 0%, #0D1424 100%);
+            text-align: center;
         }
 
-        .telegram-list {
+        .proof-grid {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 15px;
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .proof-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .proof-item:hover { background: rgba(37, 211, 102, 0.05); border-color: var(--primary-green); }
+        .proof-item .number { font-size: 2rem; font-weight: 800; color: var(--accent-green); display: block; }
+        .proof-item .label { font-size: 0.9rem; color: var(--text-muted); }
+
+        /* ================= SECTION PACKS (PRICING) ================= */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
             max-width: 900px;
             margin: 0 auto;
         }
 
-        .telegram-tag {
-            background: rgba(255, 255, 255, 0.05);
+        .pricing-card {
+            background: var(--card-bg);
             border: 1px solid var(--glass-border);
-            padding: 12px 24px;
+            border-radius: 24px;
+            padding: 40px 30px;
+            position: relative;
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .pricing-card.visible { opacity: 1; transform: translateY(0); }
+
+        .pricing-card.popular {
+            border: 2px solid var(--accent-green);
+            background: linear-gradient(180deg, rgba(140, 198, 63, 0.05), transparent);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.popular:hover { transform: scale(1.07); }
+
+        .popular-badge {
+            position: absolute;
+            top: -15px; left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent-green);
+            color: #000;
+            padding: 5px 20px;
             border-radius: 50px;
-            font-size: 0.9rem;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .pricing-card h3 { font-size: 1.6rem; margin-bottom: 10px; }
+        .pricing-card .price { font-size: 2.5rem; font-weight: 800; margin-bottom: 20px; }
+        .pricing-card .price span { font-size: 1rem; font-weight: 400; color: var(--text-muted); }
+
+        .pricing-features { list-style: none; margin-bottom: 30px; }
+        .pricing-features li {
             display: flex;
             align-items: center;
             gap: 10px;
+            margin-bottom: 12px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--primary-green);
+            font-weight: 800;
+        }
+
+        .btn-pricing {
+            display: block;
+            text-align: center;
+            padding: 15px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
             transition: all 0.3s ease;
-            opacity: 0;
-            transform: scale(0.9);
         }
 
-        .telegram-tag.visible {
-            opacity: 1;
-            transform: scale(1);
+        .btn-pricing.outline {
+            border: 2px solid var(--glass-border);
+            color: var(--text-light);
         }
 
-        .telegram-tag:hover {
-            background: rgba(0, 82, 255, 0.15);
-            border-color: var(--primary-blue);
-            transform: translateY(-3px);
+        .btn-pricing.outline:hover { border-color: var(--primary-blue); color: var(--primary-blue); }
+
+        .btn-pricing.solid {
+            background: var(--primary-blue);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 82, 255, 0.4);
         }
 
-        .telegram-tag i {
-            color: var(--primary-blue);
-            font-size: 1.2rem;
-        }
+        .btn-pricing.solid:hover { background: #0043D1; transform: translateY(-2px); }
 
-        /* ================= SECTION HOW IT WORKS ================= */
+        /* ================= SECTION COMMENT ÇA MARCHE ================= */
         .steps-container {
             display: flex;
             flex-wrap: wrap;
@@ -342,35 +365,21 @@
             transition: all 0.6s ease;
         }
 
-        .step.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .step.visible { opacity: 1; transform: translateY(0); }
 
         .step-number {
-            width: 60px;
-            height: 60px;
+            width: 60px; height: 60px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
             color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; font-weight: 700;
             margin: 0 auto 20px;
             box-shadow: 0 10px 20px rgba(0, 82, 255, 0.3);
         }
 
-        .step h3 {
-            margin-bottom: 10px;
-            font-size: 1.2rem;
-        }
-
-        .step p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
+        .step h3 { margin-bottom: 10px; font-size: 1.2rem; }
+        .step p { color: var(--text-muted); font-size: 0.9rem; }
 
         /* ================= FOOTER CTA ================= */
         .footer-cta {
@@ -379,54 +388,25 @@
             background: radial-gradient(circle at center, rgba(140, 198, 63, 0.1) 0%, transparent 70%);
         }
 
-        .footer-cta h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-
-        .footer-cta p {
-            color: var(--text-muted);
-            margin-bottom: 40px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
+        .footer-cta h2 { font-size: 2.5rem; margin-bottom: 20px; }
+        .footer-cta p { color: var(--text-muted); margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto; }
 
         /* ================= ANIMATIONS ================= */
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* ================= RESPONSIVE ================= */
         @media (max-width: 768px) {
-            nav {
-                padding: 15px 5%;
-            }
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-            .cta-container {
-                flex-direction: column;
-                width: 100%;
-                align-items: center;
-            }
-            .btn-primary, .btn-secondary {
-                width: 100%;
-                text-align: center;
-            }
-            section {
-                padding: 60px 5%;
-            }
-            .section-title h2 {
-                font-size: 1.8rem;
-            }
+            nav { padding: 15px 5%; }
+            .hero h1 { font-size: 2.2rem; }
+            .cta-container { flex-direction: column; width: 100%; align-items: center; }
+            .btn-primary, .btn-secondary { width: 100%; text-align: center; }
+            section { padding: 60px 5%; }
+            .section-title h2 { font-size: 1.8rem; }
+            .pricing-card.popular { transform: scale(1); }
+            .pricing-card.popular:hover { transform: scale(1); }
         }
     </style>
 </head>
@@ -438,76 +418,124 @@
     <!-- NAVBAR -->
     <nav>
         <div class="logo">SBC<span>.</span></div>
-        <a href="#inscription" class="btn-nav">S'inscrire</a>
+        <a href="#inscription" class="btn-nav">Rejoindre la révolution</a>
     </nav>
 
     <!-- HERO SECTION -->
     <header class="hero">
-        <h1>Bâtissez votre empire digital avec <span>SBC</span></h1>
-        <p>Rejoignez le Sniper Business Center. Accédez à des formations exclusives, des groupes Telegram d'experts, et des outils puissants pour générer des revenus en FCFA et en Crypto.</p>
+        <h1>Avec la SBC, ton téléphone devient une <span>Machine à Cash</span></h1>
+        <p>Rejoins la plus grande communauté d'entrepreneurs d'Afrique. Gagne de l'argent avec tes statuts WhatsApp, vends tes produits sur notre marketplace et forme-toi gratuitement. Ton succès commence ici.</p>
         <div class="cta-container">
-            <a href="#inscription" class="btn-primary">Créer mon compte gratuitement</a>
-            <a href="#services" class="btn-secondary">Découvrir les services</a>
+            <a href="#packs" class="btn-primary">Découvrir les Packs</a>
+            <a href="#services" class="btn-secondary">Voir comment gagner</a>
         </div>
     </header>
 
-    <!-- SECTION SERVICES -->
+    <!-- SECTION SERVICES (Ce que tu gagnes) -->
     <section id="services">
         <div class="section-title">
-            <h2>Nos <span>Services</span> exclusifs</h2>
-            <p>Tout ce dont vous avez besoin pour apprendre, vendre et monétiser votre audience, réuni en un seul endroit.</p>
+            <h2>Voici ce que tu vas <span>gagner</span> en nous rejoignant</h2>
+            <p>Une plateforme complète pour apprendre, vendre et monétiser ton réseau.</p>
         </div>
         <div class="services-grid">
             <div class="service-card">
-                <div class="service-icon">🎓</div>
-                <h3>Formations (10 modules)</h3>
-                <p>Maîtrisez le marketing, l'IA, le trading et le e-commerce grâce à des cours pratiques conçus par des experts.</p>
+                <div class="service-icon">📢</div>
+                <h3>Visibilité Maximale</h3>
+                <p>Partage ton flyer ou affiche publicitaire dans nos groupes chaque samedi et touche des milliers de clients potentiels.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">📱</div>
+                <h3>Accès à un Réseau Énorme</h3>
+                <p>Profite de plus de 30 000 contacts WhatsApp ciblés qui verront tes statuts et à qui tu pourras proposer tes produits.</p>
             </div>
             <div class="service-card">
                 <div class="service-icon">🛒</div>
-                <h3>SBC Shop</h3>
-                <p>Achetez et vendez des produits physiques ou digitaux directement au sein de notre écosystème sécurisé.</p>
+                <h3>Marketplace Dédiée</h3>
+                <p>Mets en avant tes produits et services sur notre plateforme SBC Shop. 234 boutiques membres t'attendent déjà.</p>
             </div>
             <div class="service-card">
-                <div class="service-icon">📢</div>
-                <h3>Ads Network</h3>
-                <p>Gagnez de l'argent en diffusant des publicités et des offres exclusives à votre audience ciblée.</p>
+                <div class="service-icon">🎓</div>
+                <h3>Formations Exclusives</h3>
+                <p>Bénéficie de formations complètes (Marketing 360, Trading, Achat en Chine, Art Oratoire) avec un suivi personnalisé chaque semaine sur Google Meet.</p>
             </div>
             <div class="service-card">
-                <div class="service-icon">🎟️</div>
-                <h3>SBC Event</h3>
-                <p>Participez à des événements exclusifs ou gérez la billetterie et la revente de vos propres événements.</p>
+                <div class="service-icon">💰</div>
+                <h3>Gagne de l'Argent Facilement</h3>
+                <p>Avec notre système d'affiliation rémunéré sur 3 niveaux. Tu invites quelqu'un, tu reçois 1000 FCFA directement dans ton compte.</p>
             </div>
             <div class="service-card">
-                <div class="service-icon">📇</div>
-                <h3>Contacts SBC</h3>
-                <p>Accédez à un répertoire de partenaires, prestataires et clients pour développer votre réseau professionnel.</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon">❤️</div>
-                <h3>SBC Love</h3>
-                <p>Un espace communautaire unique pour échanger, s'entraider et créer des connexions solides (disponible le mercredi).</p>
+                <div class="service-icon">🌍</div>
+                <h3>Une Entreprise Légale</h3>
+                <p>SBC est une entreprise enregistrée au Cameroun et au Bénin. Rejoins une structure solide et sérieuse.</p>
             </div>
         </div>
     </section>
 
-    <!-- SECTION TELEGRAM -->
-    <section class="telegram-section">
+    <!-- SECTION PREUVE SOCIALE (Les gains) -->
+    <section class="proof-section">
         <div class="section-title">
-            <h2>Rejoignez nos <span>Communautés Telegram</span></h2>
-            <p>Apprenez au quotidien aux côtés de milliers de membres actifs. Cliquez pour découvrir nos groupes thématiques.</p>
+            <h2>Ils ont déjà généré des <span>millions de FCFA</span></h2>
+            <p>Rejoins les milliers de jeunes africains qui transforment leur vie grâce à la SBC.</p>
         </div>
-        <div class="telegram-list">
-            <div class="telegram-tag"><i>✈️</i> Achat en Chine</div>
-            <div class="telegram-tag"><i>✈️</i> Machine à Cash</div>
-            <div class="telegram-tag"><i>✈️</i> Revente produits digitaux</div>
-            <div class="telegram-tag"><i>✈️</i> Création contenu avec IA</div>
-            <div class="telegram-tag"><i>✈️</i> Marketing 360°</div>
-            <div class="telegram-tag"><i>✈️</i> Trading des indices synthétiques</div>
-            <div class="telegram-tag"><i>✈️</i> Art Oratoire</div>
-            <div class="telegram-tag"><i>✈️</i> Création des bots WhatsApp</div>
-            <div class="telegram-tag"><i>✈️</i> SBC IA CREA...</div>
-            <div class="telegram-tag"><i>✈️</i> Formation pin...</div>
+        <div class="proof-grid">
+            <div class="proof-item">
+                <span class="number">138 858 F</span>
+                <span class="label">Solde total d'un membre</span>
+            </div>
+            <div class="proof-item">
+                <span class="number">130 709 F</span>
+                <span class="label">Bénéfice généré en 30 jours</span>
+            </div>
+            <div class="proof-item">
+                <span class="number">97 072 F</span>
+                <span class="label">Retraits effectués</span>
+            </div>
+            <div class="proof-item">
+                <span class="number">30 000+</span>
+                <span class="label">Contacts WhatsApp ciblés</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION PACKS (Pricing) -->
+    <section id="packs">
+        <div class="section-title">
+            <h2>Choisis ton <span>Pack</span> et commence à gagner</h2>
+            <p>Un abonnement unique et à vie. Pas de frais cachés.</p>
+        </div>
+        <div class="pricing-grid">
+            <!-- Pack Classique -->
+            <div class="pricing-card">
+                <h3>Pack Classique</h3>
+                <div class="price">2 150 <span>FCFA · à vie</span></div>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Tout pour démarrer et gagner dès tes premiers statuts.</p>
+                <ul class="pricing-features">
+                    <li><strong>Gagne jusqu'à 1,75 FCFA par vue</strong> WhatsApp</li>
+                    <li>1 000 vues = 1 750 FCFA pour toi</li>
+                    <li>Possibilité de gagner entre 5 000 et 10 000 FCFA par jour</li>
+                    <li>Vente de produits digitaux</li>
+                    <li>Contacts WhatsApp ciblés par pays</li>
+                    <li>Accès à la marketplace SBC</li>
+                    <li>5 formations incluses (Trading, Achat en Chine, Art Oratoire, Marketing, Bots WhatsApp)</li>
+                </ul>
+                <a href="#inscription" class="btn-pricing outline">Choisir le Pack Classique</a>
+            </div>
+
+            <!-- Pack Ciblé (Populaire) -->
+            <div class="pricing-card popular">
+                <div class="popular-badge">Meilleur Choix</div>
+                <h3>Pack Ciblé</h3>
+                <div class="price">5 300 <span>FCFA · payé</span></div>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Le meilleur tarif par vue et un ciblage précis de vos contacts.</p>
+                <ul class="pricing-features">
+                    <li><strong>Gagne jusqu'à 2 FCFA par vue</strong> WhatsApp</li>
+                    <li>1 000 vues = 2 000 FCFA pour toi</li>
+                    <li>Tout le Pack Classique, et en plus :</li>
+                    <li><strong>Ciblage avancé :</strong> pays, sexe, âge, profession, ville et centres d'intérêt</li>
+                    <li>6 formations incluses (ajout de SBC IA Creator)</li>
+                </ul>
+                <a href="#inscription" class="btn-pricing solid">Choisir le Pack Ciblé</a>
+            </div>
         </div>
     </section>
 
@@ -540,8 +568,8 @@
     <section class="footer-cta" id="inscription">
         <h2>Prêt à passer au niveau supérieur ?</h2>
         <p>Ne restez pas spectateur. Rejoignez SBC aujourd'hui et commencez à bâtir votre empire digital avec des outils professionnels.</p>
-        <a href="#" class="btn-primary" style="font-size: 1.2rem; padding: 20px 50px;">S'INSCRIRE MAINTENANT</a>
-        <p style="margin-top: 20px; font-size: 0.8rem; color: #666;">Aucun frais d'inscription. Accès immédiat aux premiers services.</p>
+        <a href="#" class="btn-primary" style="font-size: 1.2rem; padding: 20px 50px;">S'INSCRIRE MAINTENANT POUR 2150 FCFA</a>
+        <p style="margin-top: 20px; font-size: 0.8rem; color: #666;">Paiement unique. Accès à vie. Communauté active.</p>
     </section>
 
     <!-- SCRIPT POUR LES ANIMATIONS AU DÉFILEMENT -->
@@ -561,7 +589,7 @@
         }, observerOptions);
 
         // Sélectionner tous les éléments à animer
-        const elementsToAnimate = document.querySelectorAll('.service-card, .telegram-tag, .step');
+        const elementsToAnimate = document.querySelectorAll('.service-card, .pricing-card, .step');
         
         elementsToAnimate.forEach((el, index) => {
             // Ajouter un délai progressif pour un effet cascade
@@ -577,7 +605,7 @@
                 nav.style.background = 'rgba(10, 14, 23, 0.95)';
             } else {
                 nav.style.padding = '20px 5%';
-                nav.style.background = 'rgba(10, 14, 23, 0.8)';
+                nav.style.background = 'rgba(10, 14, 23, 0.85)';
             }
         });
     </script>
