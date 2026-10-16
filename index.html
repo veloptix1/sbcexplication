@@ -7,35 +7,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --sbc-blue: #0052FF;
-            --sbc-light-blue: #E6F0FF;
-            --wa-green: #25D366;
-            --wa-dark-green: #128C7E;
-            --sbc-gold: #FFC107;
-            --sbc-dark: #1A202C;
-            --sbc-gray: #F8F9FA;
-            --sbc-border: #E2E8F0;
-            --sbc-text: #2D3748;
-            --sbc-muted: #718096;
+            --sbc-blue: #0052FF; --sbc-light-blue: #E6F0FF; --wa-green: #25D366; --wa-dark-green: #128C7E;
+            --sbc-gold: #FFC107; --sbc-dark: #1A202C; --sbc-gray: #F8F9FA; --sbc-border: #E2E8F0;
+            --sbc-text: #2D3748; --sbc-muted: #718096;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
         body { background-color: #FFFFFF; color: var(--sbc-text); overflow-x: hidden; line-height: 1.6; padding-bottom: 80px; }
         
-        /* NAVBAR HAUT */
         nav.top-nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; position: fixed; width: 100%; top: 0; z-index: 100; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--sbc-border); }
         .logo { font-size: 1.5rem; font-weight: 800; color: var(--sbc-blue); letter-spacing: 1px; }
         .logo span { color: var(--wa-green); }
         .btn-nav { background: var(--wa-green); color: white; padding: 10px 20px; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); }
         .btn-nav:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6); }
 
-        /* SECTIONS */
         section { padding: 80px 5% 40px; }
         .section-title { text-align: center; margin-bottom: 40px; }
         .section-title h2 { font-size: 2rem; font-weight: 700; margin-bottom: 10px; color: var(--sbc-dark); }
         .section-title h2 span { color: var(--sbc-blue); }
         .section-title p { color: var(--sbc-muted); max-width: 600px; margin: 0 auto; font-size: 0.95rem; }
 
-        /* HERO */
         .hero { min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 120px 20px 60px; background: linear-gradient(135deg, var(--sbc-light-blue) 0%, #FFFFFF 100%); }
         .hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.1; margin-bottom: 20px; color: var(--sbc-dark); animation: fadeInUp 1s ease-out; }
         .hero h1 span { color: var(--wa-green); }
@@ -46,7 +36,6 @@
         .btn-secondary { background: white; color: var(--sbc-blue); padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 1rem; border: 2px solid var(--sbc-blue); transition: all 0.3s ease; }
         .btn-secondary:hover { background: var(--sbc-light-blue); }
 
-        /* EXPLICATION */
         .explanation-section { background: var(--sbc-gray); }
         .explanation-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; max-width: 1100px; margin: 0 auto; }
         .explanation-card { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); text-align: center; border: 1px solid var(--sbc-border); transition: all 0.4s ease; opacity: 0; transform: translateY(30px); }
@@ -56,7 +45,6 @@
         .explanation-card h3 { font-size: 1.3rem; margin-bottom: 10px; color: var(--sbc-dark); }
         .explanation-card p { color: var(--sbc-muted); font-size: 0.95rem; }
 
-        /* PREUVE */
         .proof-section { background: white; }
         .proof-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; max-width: 1100px; margin: 0 auto; }
         .proof-card { background: white; border-radius: 20px; padding: 30px; border: 2px solid var(--sbc-border); text-align: center; transition: all 0.4s ease; opacity: 0; transform: translateY(30px); }
@@ -69,7 +57,6 @@
         .proof-value { font-size: 2rem; font-weight: 800; color: var(--sbc-dark); }
         .proof-value span { font-size: 0.9rem; font-weight: 400; color: var(--sbc-muted); display: block; }
 
-        /* TABLEAU */
         .gains-section { background: linear-gradient(135deg, #FFFFFF 0%, var(--sbc-light-blue) 100%); }
         .gains-table { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); border: 1px solid var(--sbc-border); overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; min-width: 500px; }
@@ -78,7 +65,6 @@
         td { color: var(--sbc-dark); font-weight: 500; }
         .highlight { color: var(--wa-green); font-weight: 800; font-size: 1.1rem; }
 
-        /* PRICING */
         .pricing-section { background: var(--sbc-gray); }
         .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; max-width: 900px; margin: 0 auto; }
         .pricing-card { background: white; border-radius: 24px; padding: 35px 25px; position: relative; transition: all 0.4s ease; opacity: 0; transform: translateY(30px); border: 1px solid var(--sbc-border); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); }
@@ -98,48 +84,18 @@
         .btn-pricing.solid { background: var(--wa-green); color: white; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); }
         .btn-pricing.solid:hover { background: #1EBE5A; transform: translateY(-2px); }
 
-        /* FOOTER CTA */
         .footer-cta { text-align: center; padding: 60px 20px; background: linear-gradient(135deg, var(--wa-green) 0%, var(--wa-dark-green) 100%); color: white; }
         .footer-cta h2 { font-size: 2rem; margin-bottom: 15px; }
         .footer-cta p { margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto; opacity: 0.9; }
         .btn-footer { background: white; color: var(--wa-dark-green); padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 1.1rem; display: inline-flex; align-items: center; gap: 10px; transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); }
         .btn-footer:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3); }
 
-        /* BARRE DE NAVIGATION BASSE */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0; left: 0;
-            width: 100%;
-            background: white;
-            border-top: 1px solid var(--sbc-border);
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            z-index: 1000;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
-        }
-        .bottom-nav a {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: var(--sbc-muted);
-            font-size: 0.7rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            gap: 4px;
-        }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid var(--sbc-border); display: flex; justify-content: space-around; padding: 10px 0; z-index: 1000; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); }
+        .bottom-nav a { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: var(--sbc-muted); font-size: 0.7rem; font-weight: 600; transition: all 0.3s ease; gap: 4px; }
         .bottom-nav a.active { color: var(--wa-green); }
         .bottom-nav a.active .nav-icon { background: var(--sbc-light-blue); color: var(--sbc-blue); }
-        .nav-icon {
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-        }
+        .nav-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: all 0.3s ease; }
 
-        /* ANIMATIONS */
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
         @media (max-width: 768px) {
@@ -174,17 +130,23 @@
         </div>
         <div class="explanation-grid">
             <div class="explanation-card">
-                <div class="step-icon">📱</div>
+                <div class="step-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0052FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                </div>
                 <h3>1. Publie tes statuts</h3>
                 <p>Continue à publier tes statuts WhatsApp comme d'habitude. Photos, vidéos ou textes, chaque vue compte.</p>
             </div>
             <div class="explanation-card">
-                <div class="step-icon">👁️</div>
+                <div class="step-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </div>
                 <h3>2. Accumule des vues</h3>
                 <p>Plus ton réseau est grand, plus tu as de vues. Nous te connectons à plus de 30 000 contacts ciblés.</p>
             </div>
             <div class="explanation-card">
-                <div class="step-icon">💸</div>
+                <div class="step-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#FFC107" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                </div>
                 <h3>3. Sois payé</h3>
                 <p>Chaque vue est convertie en FCFA. Retire tes gains directement dans ton portefeuille SBC.</p>
             </div>
@@ -293,24 +255,11 @@
         <a href="https://sniperbuisnesscenter.com/signup?affiliationCode=abdoula" class="btn-footer" target="_blank">📲 S'INSCRIRE MAINTENANT</a>
     </section>
 
-    <!-- BARRE DE NAVIGATION BASSE -->
     <div class="bottom-nav">
-        <a href="statuts.html" class="active">
-            <div class="nav-icon">📱</div>
-            <span>Statuts</span>
-        </a>
-        <a href="affilier.html">
-            <div class="nav-icon">🤝</div>
-            <span>Affilier</span>
-        </a>
-        <a href="shop.html">
-            <div class="nav-icon">🛒</div>
-            <span>Shop</span>
-        </a>
-        <a href="contacts.html">
-            <div class="nav-icon">📇</div>
-            <span>Contacts</span>
-        </a>
+        <a href="index.html" class="active"><div class="nav-icon">📱</div><span>Statuts</span></a>
+        <a href="affilier.html"><div class="nav-icon">🤝</div><span>Affilier</span></a>
+        <a href="shop.html"><div class="nav-icon">🛒</div><span>Shop</span></a>
+        <a href="contacts.html"><div class="nav-icon">📇</div><span>Contacts</span></a>
     </div>
 
     <script>
