@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Types TypeScript
+        run: npm run typecheck
+      - name: Tests
+        run: npm test
+      - name: Compilation
+        run: npm run build
+      - name: Archive du site compilé
+        uses: actions/upload-artifact@v4
+        with:
+          name: appforge-dist
+          path: dist
+          retention-days: 14
