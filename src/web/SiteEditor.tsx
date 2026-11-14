@@ -1,7 +1,7 @@
 import { useDeferredValue, useMemo, useState, type Dispatch } from "react";
 import { BLOCK_META, BLOCK_ORDER } from "../core/blocks.js";
 import { THEMES, renderSite } from "../core/render-site.js";
-import { THEME_IDS, type Block, type BlockType, type SiteLike, type SiteSettings } from "../core/schema.js";
+import { THEME_IDS, type Block, type BlockType, type PageLike, type SiteSettings } from "../core/schema.js";
 import { uid } from "../core/util.js";
 import { BlockForm, blockSummary } from "./blockForms.js";
 import { Segmented, Select, TextArea, TextInput } from "./fields.js";
@@ -12,18 +12,18 @@ const ACCENTS = ["#4b3fd1", "#2f3fb8", "#0f766e", "#15803d", "#a16207", "#c2410c
 type Panel = "blocks" | "inspect" | "preview";
 
 interface Props {
-  project: SiteLike;
+  project: PageLike;
   dispatch: Dispatch<Action>;
 }
 
 export function SiteEditor({ project, dispatch }: Props) {
   const [sel, setSel] = useState<string | null>(null);
   const [panel, setPanel] = useState<Panel>("blocks");
-  const [device, setDevice] = useState<"mobile" | "desktop">(project.kind === "page" || window.matchMedia("(max-width: 979px)").matches ? "mobile" : "desktop");
+  const [device, setDevice] = useState<"mobile" | "desktop">(project.kind !== "site" || window.matchMedia("(max-width: 979px)").matches ? "mobile" : "desktop");
   const [dragId, setDragId] = useState<string | null>(null);
   const [overId, setOverId] = useState<string | null>(null);
 
-  const edit = (fn: (p: SiteLike) => SiteLike, key?: string) => dispatch({ type: "edit", fn: siteEdit(fn), ...(key ? { key } : {}), now: Date.now() });
+  const edit = (fn: (p: PageLike) => PageLike, key?: string) => dispatch({ type: "edit", fn: siteEdit(fn), ...(key ? { key } : {}), now: Date.now() });
   const patchBlocks = (fn: (blocks: Block[]) => Block[], key?: string) => edit((p) => ({ ...p, blocks: fn(p.blocks) }), key);
   const patchSettings = (patch: Partial<SiteSettings>, key?: string) => edit((p) => ({ ...p, settings: { ...p.settings, ...patch } }), key);
 
@@ -155,11 +155,11 @@ export function SiteEditor({ project, dispatch }: Props) {
   );
 }
 
-function SettingsForm({ project, onName, onChange }: { project: SiteLike; onName: (n: string) => void; onChange: (patch: Partial<SiteSettings>, key?: string) => void }) {
+function SettingsForm({ project, onName, onChange }: { project: PageLike; onName: (n: string) => void; onChange: (patch: Partial<SiteSettings>, key?: string) => void }) {
   const s = project.settings;
   return (
     <>
-      <div className="pane-head"><h2>{project.kind === "page" ? "Réglages de la page" : "Réglages du site"}</h2></div>
+      <div className="pane-head"><h2>{project.kind === "site" ? "Réglages du site" : project.kind === "app" ? "Réglages de l'accueil" : "Réglages de la page"}</h2></div>
       <TextInput label="Nom du projet" hint="Visible seulement dans AppForge." value={project.name} max={80} onChange={onName} />
       <TextInput label="Titre de l'onglet" hint="Affiché dans l'onglet du navigateur et sur Google." value={s.title} max={120} onChange={(v) => onChange({ title: v }, "s:title")} />
       <TextArea label="Description pour Google" rows={3} value={s.description} max={300} onChange={(v) => onChange({ description: v }, "s:description")} />

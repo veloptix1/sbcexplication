@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { BLOCK_META } from "./blocks.js";
-import { BotDraft, BotProject, PageProject, SiteDraft, SiteProject, normalizeProject, type Project, type ProjectKind } from "./schema.js";
+import { AppDraft, AppProject, BotDraft, BotProject, PageProject, SiteDraft, SiteProject, normalizeProject, type Project, type ProjectKind } from "./schema.js";
 import { clampStrings } from "./util.js";
 
 export interface GenerateRequest {
@@ -32,7 +32,7 @@ const MAX_ATTEMPTS = 2;
 
 /** JSON Schema compris par l'API : sans $schema ni valeurs par défaut, oneOf → anyOf. */
 export function toolSchema(kind: ProjectKind): Record<string, unknown> {
-  const raw = z.toJSONSchema(kind === "bot" ? BotDraft : SiteDraft, { io: "input", unrepresentable: "any" });
+  const raw = z.toJSONSchema(kind === "bot" ? BotDraft : kind === "app" ? AppDraft : SiteDraft, { io: "input", unrepresentable: "any" });
   const clean = (node: unknown): unknown => {
     if (Array.isArray(node)) return node.map(clean);
     if (node && typeof node === "object") {
@@ -56,6 +56,15 @@ const COMMON_RULES = `Règles générales :
 - Réponds uniquement en appelant l'outil ${TOOL_NAME}.`;
 
 export function systemPrompt(kind: ProjectKind, lang: "fr" | "en"): string {
+  if (kind === "app") {
+    return `Tu conçois une boutique en ligne complète (catalogue, panier, commandes) pour un outil no-code. Tu produis :
+- "name" et "settings" : "title", "description", "lang" ("${lang}"), "theme" ("clean", "paper", "midnight" ou "forest"), "accent" (couleur hex #RRGGBB adaptée à l'activité), "emoji".
+- "shop" : "currency" (FCFA par défaut, ou la devise évoquée), "deliveryFee", "freeDeliveryFrom" (0 = jamais), "minOrder", "orderNote" (une phrase sur la livraison ou le retrait).
+- "products" : 6 à 20 produits ou plats réalistes pour l'activité décrite, avec "name", "price" (nombre, dans la devise), "category" (3 à 5 catégories), "description" (une ligne), "stock" (null si illimité, sinon un entier). Ne mets pas d'image.
+- "payments" : seulement { "cod": true }. Laisse "momo" vide et ne mets aucun lien de paiement : le commerçant les ajoutera.
+- "blocks" : la page d'accueil, 3 à 5 blocs (un "hero" dont le lien vaut "#shop", puis "features", "text" ou "faq"). Les types autorisés : ${Object.keys(BLOCK_META).join(", ")}.
+${COMMON_RULES}`;
+  }
   if (kind === "bot") {
     return `Tu conçois des bots Telegram pour un outil no-code. Tu produis l'arbre de menus du bot sous forme de liste à plat : chaque nœud a un "id" court et unique, et un "parent" qui vaut "root" (menu principal) ou l'id d'un autre nœud de type "message".
 Types de nœuds :
@@ -119,6 +128,11 @@ function buildProject(kind: ProjectKind, input: unknown): Project {
     const bot = normalizeProject(BotProject.parse({ kind, ...BotDraft.parse(data) }));
     if (bot.kind === "bot" && bot.nodes.length === 0) throw new Error("nodes : le bot ne contient aucun nœud");
     return bot;
+  }
+  if (kind === "app") {
+    const app = normalizeProject(AppProject.parse({ kind, ...AppDraft.parse(data) }));
+    if (app.kind === "app" && app.products.length === 0) throw new Error("products : la boutique ne contient aucun produit");
+    return app;
   }
   const draft = SiteDraft.parse(data);
   if (draft.blocks.length === 0) throw new Error("blocks : la page ne contient aucun bloc");

@@ -2,23 +2,36 @@ import { Hono, type Context } from "hono";
 import { bodyLimit } from "hono/body-limit";
 import { z } from "zod";
 import { AiError, generateProject } from "../core/ai.js";
+import { createApkRoutes } from "./apk.js";
+import { sha256Hex } from "./auth.js";
 import { RateLimiter } from "./rate-limit.js";
+import { createShopRoutes } from "./shop.js";
+import { MemoryStore, SupabaseStore, type Store } from "./store.js";
 
 export interface ServerEnv {
   ANTHROPIC_API_KEY?: string | undefined;
   ANTHROPIC_MODEL?: string | undefined;
   ACCESS_CODE?: string | undefined;
   MAX_GENERATIONS_PER_HOUR?: string | undefined;
+  SUPABASE_URL?: string | undefined;
+  SUPABASE_SERVICE_KEY?: string | undefined;
+  SESSION_SECRET?: string | undefined;
+  TELEGRAM_API_BASE?: string | undefined;
+  GITHUB_TOKEN?: string | undefined;
+  GITHUB_REPO?: string | undefined;
+  PUBLIC_URL?: string | undefined;
 }
 
 export interface ServerDeps {
   fetchImpl?: typeof fetch;
+  /** Stockage imposé (serveur Node : fichier JSON ; tests : mémoire). Sinon Supabase si configuré. */
+  store?: Store;
   /** Adresse du client quand les en-têtes proxy sont absents (serveur Node local). */
   remoteAddress?: (c: Context) => string | undefined;
 }
 
 const GenerateBody = z.object({
-  kind: z.enum(["site", "page", "bot"]),
+  kind: z.enum(["site", "page", "app", "bot"]),
   prompt: z.string().trim().min(5, "Décris ton projet en quelques mots (5 caractères minimum).").max(2000, "Description trop longue (2 000 caractères maximum)."),
   lang: z.enum(["fr", "en"]).default("fr"),
   code: z.string().max(200).optional(),
@@ -34,7 +47,7 @@ function sameSecret(a: string, b: string): boolean {
 const clientIp = (headers: Headers, fallback?: string): string =>
   headers.get("x-forwarded-for")?.split(",")[0]?.trim() || headers.get("x-real-ip") || fallback || "inconnu";
 
-export function createApp(env: ServerEnv, deps: ServerDeps = {}): Hono {
+export async function createApp(env: ServerEnv, deps: ServerDeps = {}): Promise<Hono> {
   const app = new Hono();
   const max = Math.max(1, Number.parseInt(env.MAX_GENERATIONS_PER_HOUR ?? "", 10) || 10);
   const limiter = new RateLimiter(max);
@@ -46,7 +59,12 @@ export function createApp(env: ServerEnv, deps: ServerDeps = {}): Hono {
     c.header("Cache-Control", "no-store");
   });
 
-  app.get("/api/health", (c) => c.json({ ok: true, ai: Boolean(env.ANTHROPIC_API_KEY), protected: Boolean(env.ACCESS_CODE), limitPerHour: max }));
+  const store: Store =
+    deps.store ?? (env.SUPABASE_URL && env.SUPABASE_SERVICE_KEY ? new SupabaseStore(env.SUPABASE_URL, env.SUPABASE_SERVICE_KEY, deps.fetchImpl) : new MemoryStore());
+  // Secret des sessions clients : fourni, sinon dérivé de la clé Supabase (stable entre instances), sinon aléatoire (sessions perdues au redémarrage).
+  const secretPromise = env.SESSION_SECRET ? Promise.resolve(env.SESSION_SECRET) : env.SUPABASE_SERVICE_KEY ? sha256Hex(`appforge:${env.SUPABASE_SERVICE_KEY}`) : Promise.resolve(crypto.randomUUID() + crypto.randomUUID());
+
+  app.get("/api/health", (c) => c.json({ ok: true, ai: Boolean(env.ANTHROPIC_API_KEY), protected: Boolean(env.ACCESS_CODE), limitPerHour: max, storage: store.kind, persistent: store.persistent, apk: Boolean(env.GITHUB_TOKEN) }));
 
   app.post(
     "/api/generate",
@@ -75,6 +93,16 @@ export function createApp(env: ServerEnv, deps: ServerDeps = {}): Hono {
       }
     },
   );
+
+  app.route("/", createShopRoutes({
+    store,
+    secret: await secretPromise,
+    fetchImpl: deps.fetchImpl ?? fetch,
+    telegramBase: env.TELEGRAM_API_BASE || "https://api.telegram.org",
+    clientIp: (c) => clientIp(c.req.raw.headers, deps.remoteAddress?.(c)),
+  }));
+
+  app.route("/", createApkRoutes(env, store, deps.fetchImpl ?? fetch));
 
   app.all("/api/*", (c) => c.json({ error: "Route inconnue." }, 404));
   return app;

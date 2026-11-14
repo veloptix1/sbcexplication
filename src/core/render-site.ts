@@ -1,4 +1,4 @@
-import type { Block, SiteLike, SiteSettings, ThemeId } from "./schema.js";
+import type { Block, PageLike, SiteLike, SiteSettings, ThemeId } from "./schema.js";
 import { esc, isHex, readableOn, safeUrl, videoEmbed, waDigits, waLink } from "./util.js";
 
 export interface Theme {
@@ -17,8 +17,8 @@ export const THEMES: Record<ThemeId, Theme> = {
   forest: { label: "Forêt", bg: "#0f1f18", surface: "#172a21", text: "#e8f3ec", muted: "#94b3a2", line: "#25402f" },
 };
 
-const RADIUS = { sm: "6px", md: "12px", lg: "22px" } as const;
-const FONTS = {
+export const RADIUS = { sm: "6px", md: "12px", lg: "22px" } as const;
+export const FONTS = {
   sans: 'system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",sans-serif',
   serif: 'Georgia,"Iowan Old Style","Times New Roman",serif',
   rounded: 'ui-rounded,"Nunito","Trebuchet MS",system-ui,sans-serif',
@@ -165,9 +165,33 @@ const FORM_SCRIPT =
   "var n=f.getAttribute('data-wa');if(!n){return}var t=Array.prototype.map.call(f.querySelectorAll('[data-l]'),function(i){return i.getAttribute('data-l')+' : '+i.value}).join('\\n');" +
   "window.open('https://wa.me/'+n+'?text='+encodeURIComponent(t),'_blank','noopener')})})";
 
+/** La première section de chaque type reçoit une ancre : #contact, #orderForm, #faq… */
+function anchorsFor(blocks: Block[]): Map<string, string> {
+  const anchors = new Map<string, string>();
+  const taken = new Set<string>();
+  for (const b of blocks) if (!taken.has(b.type)) { taken.add(b.type); anchors.set(b.id, b.type); }
+  return anchors;
+}
+
+const layoutOf = (p: PageLike): SiteLike["kind"] => (p.kind === "app" ? "page" : p.kind);
+
+/**
+ * Le contenu d'une page sans le document autour : style et HTML, à insérer dans un Shadow DOM.
+ * Même rendu, même échappement que renderSite.
+ */
+export function renderFragment(p: PageLike): { css: string; html: string; script: string } {
+  const anchors = anchorsFor(p.blocks);
+  return {
+    css: css(p.settings, layoutOf(p)),
+    html: p.blocks.map((b) => renderBlock(b, p.settings, anchors.get(b.id) ?? "")).join("\n"),
+    script: p.blocks.some((b) => b.type === "orderForm") ? FORM_SCRIPT : "",
+  };
+}
+
 /** Génère un document HTML autonome (aucune dépendance externe). */
-export function renderSite(p: SiteLike): string {
+export function renderSite(p: PageLike): string {
   const s = p.settings;
+  const kind = layoutOf(p);
   const firstHero = p.blocks.find((b): b is Extract<Block, { type: "hero" }> => b.type === "hero");
   const title = s.title || firstHero?.title || p.name || "Mon site";
   const description = s.description || firstHero?.text || "";
@@ -175,10 +199,7 @@ export function renderSite(p: SiteLike): string {
   const favicon = emoji
     ? `<link rel="icon" href="data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">${esc(emoji)}</text></svg>`)}">`
     : "";
-  // La première section de chaque type reçoit une ancre : #contact, #orderForm, #faq…
-  const anchors = new Map<string, string>();
-  const taken = new Set<string>();
-  for (const b of p.blocks) if (!taken.has(b.type)) { taken.add(b.type); anchors.set(b.id, b.type); }
+  const anchors = anchorsFor(p.blocks);
   const hasForm = p.blocks.some((b) => b.type === "orderForm");
   const float = waDigits(s.whatsappFloat)
     ? `<a class="wa-float" href="${esc(waLink(s.whatsappFloat))}" aria-label="WhatsApp" rel="noopener">${WA_ICON}</a>`
@@ -194,9 +215,9 @@ ${description ? `<meta name="description" content="${esc(description.slice(0, 16
 ${description ? `<meta property="og:description" content="${esc(description.slice(0, 200))}">` : ""}
 <meta name="theme-color" content="${esc(isHex(s.accent) ? s.accent : "#4b3fd1")}">
 ${favicon}
-<style>${css(s, p.kind)}</style>
+<style>${css(s, kind)}</style>
 </head>
-<body class="k-${p.kind}">
+<body class="k-${kind}">
 <main>
 ${p.blocks.map((b) => renderBlock(b, s, anchors.get(b.id) ?? "")).join("\n")}
 </main>

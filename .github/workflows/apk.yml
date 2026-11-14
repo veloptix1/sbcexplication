@@ -1,0 +1,74 @@
+name: APK
+
+# Fabrique l'APK Android d'une boutique publiée avec AppForge.
+# Lancement : depuis AppForge (bouton « Compiler l'APK »), ou ici : Actions > APK > Run workflow.
+run-name: APK ${{ inputs.slug }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: "Adresse courte de la boutique (ex : ma-boutique)"
+        required: true
+      url:
+        description: "Adresse complète de la boutique (https://…/a/ma-boutique)"
+        required: true
+      name:
+        description: "Nom affiché sous l'icône"
+        required: true
+        default: "Ma boutique"
+      color:
+        description: "Couleur de l'icône (#RRGGBB)"
+        required: true
+        default: "#4b3fd1"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: apk-${{ inputs.slug }}
+  cancel-in-progress: true
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Générer le projet Android
+        env:
+          APP_URL: ${{ inputs.url }}
+          APP_NAME: ${{ inputs.name }}
+          APP_SLUG: ${{ inputs.slug }}
+          APP_COLOR: ${{ inputs.color }}
+        run: node scripts/apk/prepare.mjs build/apk
+      - name: Compiler l'APK
+        working-directory: build/apk/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon --console=plain
+      - name: Renommer l'APK
+        env:
+          APP_SLUG: ${{ inputs.slug }}
+        run: cp build/apk/android/app/build/outputs/apk/debug/app-debug.apk "build/$APP_SLUG.apk"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: apk-${{ inputs.slug }}
+          path: build/${{ inputs.slug }}.apk
+          retention-days: 30
+      - name: Publier dans les Releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+          APP_SLUG: ${{ inputs.slug }}
+          APP_URL: ${{ inputs.url }}
+        run: |
+          TAG="apk-$APP_SLUG"
+          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "APK $APP_SLUG" --notes "Application Android de $APP_URL"
+          gh release upload "$TAG" "build/$APP_SLUG.apk" --clobber

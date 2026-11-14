@@ -8,8 +8,8 @@ const toolReply = (input: unknown, id = "tu_1") =>
 
 const goodSite = { name: "Salon Awa", settings: { title: "Salon Awa", accent: "#aa3366" }, blocks: [{ type: "hero", title: "Bienvenue", text: "Coiffure à Douala" }, { type: "footer", text: "© Salon Awa" }] };
 
-const post = (app: ReturnType<typeof createApp>, body: unknown, headers: Record<string, string> = {}) =>
-  app.request("/api/generate", { method: "POST", headers: { "content-type": "application/json", ...headers }, body: JSON.stringify(body) });
+const post = async (appP: Awaited<ReturnType<typeof createApp>> | ReturnType<typeof createApp>, body: unknown, headers: Record<string, string> = {}) =>
+  (await appP).request("/api/generate", { method: "POST", headers: { "content-type": "application/json", ...headers }, body: JSON.stringify(body) });
 
 describe("schéma de l'outil IA", () => {
   it("ne contient ni $schema, ni default, ni oneOf", () => {
@@ -83,7 +83,7 @@ describe("API", () => {
   const env: ServerEnv = { ANTHROPIC_API_KEY: "secret-key" };
 
   it("health ne révèle aucun secret", async () => {
-    const res = await createApp({ ...env, ACCESS_CODE: "abc" }).request("/api/health");
+    const res = await (await createApp({ ...env, ACCESS_CODE: "abc" })).request("/api/health");
     const body = await res.json();
     expect(body).toMatchObject({ ok: true, ai: true, protected: true });
     expect(JSON.stringify(body)).not.toContain("secret-key");
@@ -91,7 +91,7 @@ describe("API", () => {
   });
 
   it("refuse les requêtes invalides avec un message lisible", async () => {
-    const app = createApp(env);
+    const app = await createApp(env);
     expect((await post(app, { kind: "x", prompt: "un site" })).status).toBe(400);
     const short = await post(app, { kind: "site", prompt: "ab" });
     expect(short.status).toBe(400);
@@ -101,14 +101,14 @@ describe("API", () => {
   });
 
   it("répond 503 sans clé API et 404 sur une route inconnue", async () => {
-    const app = createApp({});
+    const app = await createApp({});
     expect((await post(app, { kind: "site", prompt: "un salon de coiffure" })).status).toBe(503);
     expect((await app.request("/api/nope")).status).toBe(404);
   });
 
   it("exige le code d'accès quand il est défini", async () => {
     const fetchImpl = (async () => toolReply(goodSite)) as unknown as typeof fetch;
-    const app = createApp({ ...env, ACCESS_CODE: "sesame" }, { fetchImpl });
+    const app = await createApp({ ...env, ACCESS_CODE: "sesame" }, { fetchImpl });
     expect((await post(app, { kind: "site", prompt: "un salon de coiffure" })).status).toBe(401);
     expect((await post(app, { kind: "site", prompt: "un salon de coiffure", code: "faux" })).status).toBe(401);
     expect((await post(app, { kind: "site", prompt: "un salon de coiffure", code: "sesame" })).status).toBe(200);
@@ -116,7 +116,7 @@ describe("API", () => {
 
   it("limite les générations par adresse IP", async () => {
     const fetchImpl = (async () => toolReply(goodSite)) as unknown as typeof fetch;
-    const app = createApp({ ...env, MAX_GENERATIONS_PER_HOUR: "2" }, { fetchImpl });
+    const app = await createApp({ ...env, MAX_GENERATIONS_PER_HOUR: "2" }, { fetchImpl });
     const go = (ip: string) => post(app, { kind: "site", prompt: "un salon de coiffure" }, { "x-forwarded-for": ip });
     expect((await go("1.1.1.1")).status).toBe(200);
     expect((await go("1.1.1.1")).status).toBe(200);

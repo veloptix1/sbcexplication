@@ -256,3 +256,28 @@ input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--ink); }
   .blocks li.on .block-tools, .blocks li:focus-within .block-tools { display: flex; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+
+/* ---- application (boutique) ---- */
+.subtabs { display: flex; gap: 6px; padding: 8px 12px; overflow-x: auto; background: var(--paper); border-bottom: 1px solid var(--line); }
+.subtabs button { flex: none; border: 1px solid var(--line); background: transparent; border-radius: 99px; padding: 6px 14px; font-weight: 600; font-size: 0.9rem; }
+.subtabs button[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+.panels { display: grid; grid-template-columns: minmax(280px, 1fr) minmax(300px, 1.2fr); gap: 0; flex: 1; min-height: 0; overflow: auto; }
+.panels.single { grid-template-columns: minmax(0, 560px); justify-content: center; }
+.panels .pane { padding: 16px; overflow: auto; }
+.row-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 12px; }
+.prodlist { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.prodlist li { border: 1px solid var(--line); border-radius: 10px; background: var(--paper); }
+.prodlist li.on { border-color: var(--ink); }
+.prodlist li.off { opacity: 0.6; }
+.prodlist .block-main { width: 100%; }
+.momo { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin: 8px 0; display: grid; gap: 6px; }
+.slugrow { display: flex; align-items: center; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--paper); }
+.slugrow span { padding: 0 8px 0 12px; color: #666; font-size: 0.85rem; white-space: nowrap; max-width: 55%; overflow: hidden; text-overflow: ellipsis; }
+.slugrow input { border: 0; flex: 1; min-width: 0; }
+.dialog.wide { width: min(560px, calc(100vw - 24px)); max-height: 92dvh; overflow: auto; }
+.published { border-top: 1px solid var(--line); margin-top: 14px; padding-top: 10px; }
+.published h3 { margin: 12px 0 6px; font-size: 1rem; }
+.keybox { background: #fff7d6; border: 1px solid #e6c84d; border-radius: 10px; padding: 12px; display: grid; gap: 8px; margin: 10px 0; }
+.keybox code { word-break: break-all; font-size: 0.95rem; user-select: all; }
+.btn.inline { display: inline-block; text-decoration: none; }
+@media (max-width: 760px) { .panels { grid-template-columns: 1fr; } }

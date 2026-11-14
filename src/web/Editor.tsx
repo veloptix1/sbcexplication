@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState, type Dispatch } from "react";
 import { botFiles, botScript } from "../core/bot.js";
 import { renderSite } from "../core/render-site.js";
-import { isSiteLike, type Project, type StoredProject } from "../core/schema.js";
+import { isPageLike, type Project, type StoredProject } from "../core/schema.js";
 import { slugify } from "../core/util.js";
 import { BotEditor } from "./BotEditor.js";
 import { copyText, downloadText, downloadZip } from "./files.js";
 import { KIND_LABEL, Logo } from "./Home.js";
+import { CatalogEditor, ShopSettings } from "./AppPanels.js";
+import { PublishDialog } from "./PublishDialog.js";
 import { SiteEditor } from "./SiteEditor.js";
 import type { Action } from "./store.js";
 import { useGenerate } from "./useGenerate.js";
@@ -26,6 +28,8 @@ export function exportProjectJson(s: StoredProject): void {
 export function Editor({ stored, canUndo, canRedo, dispatch, toast, onClose }: Props) {
   const project = stored.project;
   const [aiOpen, setAiOpen] = useState(false);
+  const [pubOpen, setPubOpen] = useState(false);
+  const [section, setSection] = useState<"home" | "catalog" | "shop">("home");
   const slug = slugify(project.name);
 
   return (
@@ -39,23 +43,35 @@ export function Editor({ stored, canUndo, canRedo, dispatch, toast, onClose }: P
         <button type="button" className="icon bar" aria-label="Annuler" title="Annuler (Ctrl+Z)" disabled={!canUndo} onClick={() => dispatch({ type: "undo", now: Date.now() })}>↶</button>
         <button type="button" className="icon bar" aria-label="Rétablir" title="Rétablir (Ctrl+Maj+Z)" disabled={!canRedo} onClick={() => dispatch({ type: "redo", now: Date.now() })}>↷</button>
         <button type="button" className="btn ghost-dark" onClick={() => setAiOpen(true)}>✨ <span className="hide-sm">Refaire avec l'IA</span></button>
+        {isPageLike(project) ? <button type="button" className="btn primary" onClick={() => setPubOpen(true)}>{project.publication ? "Publier ▲" : "Publier"}</button> : null}
         <Menu label="Exporter">
-          {isSiteLike(project) ? (
+          {project.kind === "site" || project.kind === "page" ? (
             <>
               <button type="button" onClick={() => { downloadText(`${slug}.html`, renderSite(project), "text/html"); toast("Fichier HTML téléchargé."); }}>Télécharger la page (.html)</button>
               <button type="button" onClick={async () => toast((await copyText(renderSite(project))) ? "Code HTML copié." : "Copie impossible sur ce navigateur.")}>Copier le code HTML</button>
             </>
-          ) : (
+          ) : project.kind === "bot" ? (
             <>
               <button type="button" onClick={() => { downloadZip(`${slug}.zip`, botFiles(project)); toast("Bot téléchargé. Le README explique le lancement."); }}>Télécharger le bot (.zip)</button>
               <button type="button" onClick={async () => toast((await copyText(botScript(project))) ? "Code du bot copié." : "Copie impossible sur ce navigateur.")}>Copier bot.mjs</button>
             </>
-          )}
+          ) : null}
           <button type="button" onClick={() => exportProjectJson(stored)}>Sauvegarder le projet (.json)</button>
         </Menu>
       </header>
 
-      {isSiteLike(project) ? <SiteEditor key={stored.id} project={project} dispatch={dispatch} /> : <BotEditor key={stored.id} bot={project} dispatch={dispatch} toast={toast} />}
+      {project.kind === "app" ? (
+        <nav className="subtabs" aria-label="Sections de l'application">
+          {([["home", "Accueil"], ["catalog", `Catalogue (${project.products.length})`], ["shop", "Paiement et livraison"]] as const).map(([k, label]) => (
+            <button key={k} type="button" aria-pressed={section === k} onClick={() => setSection(k)}>{label}</button>
+          ))}
+        </nav>
+      ) : null}
+      {project.kind === "app" && section === "catalog" ? <CatalogEditor project={project} dispatch={dispatch} /> : null}
+      {project.kind === "app" && section === "shop" ? <ShopSettings project={project} dispatch={dispatch} /> : null}
+      {isPageLike(project) && (project.kind !== "app" || section === "home") ? <SiteEditor key={stored.id} project={project} dispatch={dispatch} /> : project.kind === "bot" ? <BotEditor key={stored.id} bot={project} dispatch={dispatch} toast={toast} /> : null}
+
+      {pubOpen && isPageLike(project) ? <PublishDialog project={project} toast={toast} onClose={() => setPubOpen(false)} onPublished={(slug) => dispatch({ type: "edit", fn: (p) => (isPageLike(p) ? { ...p, publication: { slug } } : p), now: Date.now() })} /> : null}
 
       {aiOpen ? <AiDialog project={project} onClose={() => setAiOpen(false)} onResult={(p) => { dispatch({ type: "edit", fn: () => p, now: Date.now() }); setAiOpen(false); toast("Contenu remplacé. Tu peux annuler avec ↶."); }} /> : null}
     </div>
@@ -87,7 +103,7 @@ function AiDialog({ project, onClose, onResult }: { project: Project; onClose: (
   const g = useGenerate();
   useEffect(() => { ref.current?.showModal(); }, []);
   const ready = prompt.trim().length >= 5 && g.canGenerate && !g.busy;
-  const lang = project.kind === "bot" ? project.lang : isSiteLike(project) ? project.settings.lang : "fr";
+  const lang = project.kind === "bot" ? project.lang : isPageLike(project) ? project.settings.lang : "fr";
   const go = async () => { const p = await g.run(project.kind, prompt.trim(), lang); if (p) onResult(p); };
   return (
     <dialog ref={ref} className="dialog" onClose={onClose} onCancel={(e) => { if (g.busy) e.preventDefault(); }}>
