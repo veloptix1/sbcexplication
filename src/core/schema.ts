@@ -69,11 +69,16 @@ export const SiteSettings = z.object({
 });
 export type SiteSettings = z.infer<typeof SiteSettings>;
 
-const siteShape = {
+/** Adresse en ligne d'un projet publié (la clé de gestion reste dans le navigateur). */
+export const Publication = z.object({ slug: z.string().min(2).max(40) });
+export type Publication = z.infer<typeof Publication>;
+
+const siteCore = {
   name: S(80),
   settings: SiteSettings.prefault({}),
   blocks: z.array(Block).max(60).default([]),
 };
+const siteShape = { ...siteCore, publication: Publication.optional() };
 export const SiteProject = z.object({ kind: z.literal("site"), ...siteShape });
 export const PageProject = z.object({ kind: z.literal("page"), ...siteShape });
 export type SiteProject = z.infer<typeof SiteProject>;
@@ -108,18 +113,85 @@ export const BotProject = z.object({
 export type BotProject = z.infer<typeof BotProject>;
 
 /* ------------------------------------------------------------------ */
+/* Applications : boutique avec comptes clients, commandes et paiement  */
+/* ------------------------------------------------------------------ */
+
+const Num = (max = 1e9) => z.number().min(0).max(max).default(0);
+
+export const Product = z.object({
+  id: z.string().min(1).max(40).default(() => uid()),
+  name: S(120),
+  price: Num(),
+  description: S(400),
+  image: S(500),
+  category: S(60),
+  /** null = stock illimité. */
+  stock: z.number().int().min(0).max(1_000_000).nullable().default(null),
+  active: z.boolean().default(true),
+});
+export type Product = z.infer<typeof Product>;
+
+export const MomoAccount = z.object({ operator: S(40), number: S(30), holder: S(80) });
+export type MomoAccount = z.infer<typeof MomoAccount>;
+
+export const PaymentConfig = z.object({
+  /** Paiement à la livraison ou au retrait. */
+  cod: z.boolean().default(true),
+  /** Paiement par Mobile Money : le client envoie l'argent puis saisit la référence de la transaction. */
+  momo: z.array(MomoAccount).max(6).default([]),
+  /** Lien de paiement externe (agrégateur, Wave…). {amount} et {order} sont remplacés. */
+  linkLabel: S(40),
+  linkUrl: S(300),
+});
+export type PaymentConfig = z.infer<typeof PaymentConfig>;
+
+export const NotifyConfig = z.object({ telegramBotToken: S(120), telegramChatId: S(40) });
+export type NotifyConfig = z.infer<typeof NotifyConfig>;
+
+export const ShopConfig = z.object({
+  currency: z.string().max(10).default("FCFA"),
+  deliveryFee: Num(),
+  /** Livraison offerte à partir de ce montant (0 = jamais). */
+  freeDeliveryFrom: Num(),
+  minOrder: Num(),
+  whatsapp: S(30),
+  orderNote: S(300),
+});
+export type ShopConfig = z.infer<typeof ShopConfig>;
+
+export const AppProject = z.object({
+  kind: z.literal("app"),
+  name: S(80),
+  settings: SiteSettings.prefault({}),
+  shop: ShopConfig.prefault({}),
+  payments: PaymentConfig.prefault({}),
+  notify: NotifyConfig.prefault({}),
+  products: z.array(Product).max(300).default([]),
+  /** Page d'accueil de la boutique. */
+  blocks: z.array(Block).max(40).default([]),
+  publication: Publication.optional(),
+});
+export type AppProject = z.infer<typeof AppProject>;
+
+/* ------------------------------------------------------------------ */
 /* Projet = l'un des trois types                                        */
 /* ------------------------------------------------------------------ */
 
-export const Project = z.discriminatedUnion("kind", [SiteProject, PageProject, BotProject]);
+export const Project = z.discriminatedUnion("kind", [SiteProject, PageProject, AppProject, BotProject]);
 export type Project = z.infer<typeof Project>;
 export type ProjectKind = Project["kind"];
 export type SiteLike = SiteProject | PageProject;
+/** Tout projet qui a des réglages de page et des blocs. */
+export type PageLike = SiteLike | AppProject;
 
 export const isSiteLike = (p: Project): p is SiteLike => p.kind === "site" || p.kind === "page";
+export const isPageLike = (p: Project): p is PageLike => p.kind !== "bot";
+/** Projets qui peuvent être publiés en ligne. */
+export const isPublishable = isPageLike;
 
 /** Brouillons produits par l'IA : le type est imposé par la requête, pas par le modèle. */
-export const SiteDraft = z.object(siteShape);
+export const SiteDraft = z.object(siteCore);
+export const AppDraft = AppProject.omit({ kind: true, notify: true, publication: true });
 export const BotDraft = BotProject.omit({ kind: true });
 
 /** Projet tel que sauvegardé dans le navigateur. */
@@ -169,6 +241,19 @@ export function normalizeBot(bot: BotProject): BotProject {
   return { ...bot, nodes };
 }
 
+export function normalizeApp(app: AppProject): AppProject {
+  const seen = new Set<string>();
+  const products = app.products.map((p) => {
+    let id = p.id;
+    while (seen.has(id)) id = uid();
+    seen.add(id);
+    return { ...p, id, name: p.name.trim() || "Produit" };
+  });
+  return { ...app, products };
+}
+
 export function normalizeProject(project: Project): Project {
-  return project.kind === "bot" ? normalizeBot(project) : project;
+  if (project.kind === "bot") return normalizeBot(project);
+  if (project.kind === "app") return normalizeApp(project);
+  return project;
 }

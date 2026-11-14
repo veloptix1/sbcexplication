@@ -4,15 +4,17 @@ import { TEMPLATES, blankProject, templatesFor, type Template } from "../core/te
 import { Thumb } from "./Thumb.js";
 import { useGenerate } from "./useGenerate.js";
 
-export const KIND_LABEL: Record<ProjectKind, string> = { site: "Site web", page: "Page mobile", bot: "Bot Telegram" };
+export const KIND_LABEL: Record<ProjectKind, string> = { site: "Site web", page: "Page mobile", app: "Application", bot: "Bot Telegram" };
 const KIND_BLURB: Record<ProjectKind, string> = {
   site: "Plusieurs sections, adapté au téléphone",
   page: "Une page courte : liens, catalogue, commande",
+  app: "Boutique complète : catalogue, comptes clients, commandes, paiement mobile, admin",
   bot: "Menus, réponses et messages vers toi",
 };
 const EXAMPLES: Record<ProjectKind, string[]> = {
   site: ["Site pour mon salon de coiffure à Douala avec tarifs et bouton WhatsApp", "Page de vente de ma formation en marketing digital", "Site d'un restaurant à Abidjan avec menu et réservation"],
   page: ["Page de liens pour ma boutique de vêtements", "Mini-catalogue de mes jus naturels avec commande WhatsApp"],
+  app: ["Boutique de vêtements à Douala avec livraison et paiement Orange Money", "Application de commande pour mon restaurant à Abidjan", "Boutique de téléphones et accessoires à Dakar"],
   bot: ["Bot qui présente mes formations et prend les inscriptions", "Bot pour ma boutique de téléphones : catalogue, prix et commande"],
 };
 

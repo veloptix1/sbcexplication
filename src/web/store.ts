@@ -1,5 +1,5 @@
 import { useEffect, useReducer, type Dispatch } from "react";
-import { StoredProject, isSiteLike, normalizeProject, type Project, type SiteLike } from "../core/schema.js";
+import { StoredProject, isPageLike, normalizeProject, type AppProject, type PageLike, type Project } from "../core/schema.js";
 import { uid } from "../core/util.js";
 
 const KEY = "appforge:v1";
@@ -122,5 +122,8 @@ export function useStore(): [State, Dispatch<Action>] {
 export const newId = uid;
 export const sortedProjects = (s: State): StoredProject[] => Object.values(s.projects).sort((a, b) => b.updatedAt - a.updatedAt);
 
-/** Applique une modification à un site/une page ; ignorée si le projet courant est un bot. */
-export const siteEdit = (fn: (p: SiteLike) => SiteLike) => (p: Project): Project => (isSiteLike(p) ? fn(p) : p);
+/** Applique une modification à un site, une page ou une application ; ignorée si le projet courant est un bot. */
+export const siteEdit = (fn: (p: PageLike) => PageLike) => (p: Project): Project => (isPageLike(p) ? fn(p) : p);
+
+/** Applique une modification à une application (boutique) ; ignorée pour les autres types. */
+export const appEdit = (fn: (p: AppProject) => AppProject) => (p: Project): Project => (p.kind === "app" ? fn(p) : p);

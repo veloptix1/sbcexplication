@@ -1,5 +1,5 @@
 import { mk } from "./blocks.js";
-import { BotProject, PageProject, SiteProject, type BotNode, type Project, type ProjectKind } from "./schema.js";
+import { AppProject, BotProject, PageProject, Product, SiteProject, type BotNode, type Project, type ProjectKind } from "./schema.js";
 import { uid } from "./util.js";
 
 export interface Template {
@@ -18,6 +18,17 @@ const site = (name: string, accent: string, blocks: ReturnType<typeof mk>[], ext
 
 const page = (name: string, accent: string, blocks: ReturnType<typeof mk>[], extra: Partial<PageProject["settings"]> = {}): PageProject =>
   PageProject.parse({ kind: "page", name, settings: { title: name, accent, ...extra }, blocks });
+
+type ProductRow = [name: string, price: number, category: string, description: string, stock?: number];
+const app = (name: string, accent: string, blocks: ReturnType<typeof mk>[], rows: ProductRow[], extra: Partial<AppProject["settings"]> = {}, shop: Partial<AppProject["shop"]> = {}): AppProject =>
+  AppProject.parse({
+    kind: "app", name,
+    settings: { title: name, accent, ...extra },
+    shop: { currency: "FCFA", deliveryFee: 1000, freeDeliveryFrom: 20000, orderNote: "Livraison en ville sous 24 h.", ...shop },
+    payments: { cod: true },
+    products: rows.map(([n, price, category, description, stock]) => Product.parse({ name: n, price, category, description, stock: stock ?? null })),
+    blocks,
+  });
 
 /** Construit les nœuds d'un bot avec des identifiants lisibles : [clé, parent, étiquette, type, texte|url]. */
 type Row = [key: string, parent: string, label: string, type: BotNode["type"], body: string];
@@ -110,6 +121,42 @@ export const TEMPLATES: Template[] = [
     ], { emoji: "🎓" }),
   },
   {
+    id: "app-boutique", kind: "app", name: "Boutique avec commandes", blurb: "Panier, comptes clients, paiement, admin", accent: "#c2410c",
+    build: () => app("Ma boutique", "#c2410c", [
+      mk({ type: "hero", title: "Ma boutique", text: "Des produits choisis avec soin, livrés chez toi.", cta: "Voir la boutique", link: "#shop" }),
+      mk({ type: "features", title: "Pourquoi commander ici", items: [
+        { icon: "🚚", title: "Livraison rapide", text: "En ville sous 24 h." },
+        { icon: "📱", title: "Paiement mobile", text: "Orange Money, MTN MoMo, Wave." },
+        { icon: "🔁", title: "Échange facile", text: "Sous 7 jours si l'article est intact." } ] }),
+      mk({ type: "faq", title: "Questions fréquentes", items: [
+        { q: "Comment payer ?", a: "À la livraison ou par Mobile Money : choisis au moment de la commande." },
+        { q: "Puis-je suivre ma commande ?", a: "Oui, depuis l'onglet Compte." } ] }),
+    ], [
+      ["T-shirt coton", 5000, "Vêtements", "Coton épais, tailles S à XL", 40],
+      ["Pantalon chino", 12000, "Vêtements", "Coupe droite, 3 coloris", 25],
+      ["Robe wax", 18000, "Vêtements", "Tissu wax, fait main", 10],
+      ["Baskets blanches", 18000, "Chaussures", "Confortables, semelle souple", 15],
+      ["Sandales cuir", 6000, "Chaussures", "Cuir véritable"],
+      ["Sac à main", 9500, "Accessoires", "Deux compartiments, fermeture éclair"],
+      ["Casquette", 3000, "Accessoires", "Taille unique, réglable"],
+    ], { emoji: "🛍️" }),
+  },
+  {
+    id: "app-restaurant", kind: "app", name: "Restaurant et livraison", blurb: "Menu, commande, suivi de livraison", accent: "#a16207",
+    build: () => app("Chez Mama", "#a16207", [
+      mk({ type: "hero", title: "Chez Mama", text: "Cuisine maison, livrée chaude. Commande en deux minutes.", cta: "Voir le menu", link: "#shop" }),
+      mk({ type: "text", text: "Ouvert du lundi au samedi, de 11 h à 22 h.\nLivraison dans un rayon de 5 km." }),
+      mk({ type: "faq", title: "Questions fréquentes", items: [{ q: "Quel délai de livraison ?", a: "Entre 30 et 45 minutes selon ta zone." }] }),
+    ], [
+      ["Poulet DG", 3500, "Plats", "Plantains, légumes, poulet mariné"],
+      ["Poisson braisé", 4000, "Plats", "Bâton de manioc et piment"],
+      ["Ndolé", 3000, "Plats", "Crevettes, viande, plantain"],
+      ["Jus de bissap", 500, "Boissons", "Frais, maison", 60],
+      ["Eau minérale", 300, "Boissons", "50 cl"],
+      ["Beignets", 1000, "Desserts", "Portion de 6"],
+    ], { theme: "paper", font: "serif", emoji: "🍲" }, { deliveryFee: 1000, freeDeliveryFrom: 10000, orderNote: "Livraison en 30 à 45 minutes." }),
+  },
+  {
     id: "lien-bio", kind: "page", name: "Page de liens", blurb: "Tous tes liens sur une page mobile", accent: "#db2777",
     build: () => page("Ton nom", "#db2777", [
       mk({ type: "hero", title: "Ton nom", text: "Ce que tu fais, en une ligne.", cta: "", link: "" }),
@@ -169,6 +216,7 @@ export const findTemplate = (id: string): Template | undefined => TEMPLATES.find
 
 /** Projet vide pour un type donné. */
 export function blankProject(kind: ProjectKind): Project {
+  if (kind === "app") return app("Ma boutique", "#4b3fd1", [mk({ type: "hero", title: "Ma boutique", text: "Bienvenue !", cta: "Voir la boutique", link: "#shop" })], [["Premier produit", 1000, "", "Décris ton produit"]]);
   if (kind === "bot") return bot("Mon bot", "👋 Bienvenue !", [["a", "root", "Premier bouton", "message", "Écris ici la réponse du bot."]]);
   const first = mk({ type: "hero", title: "Mon titre", text: "Une phrase d'accroche.", cta: "", link: "" });
   return kind === "page" ? page("Ma page", "#4b3fd1", [first]) : site("Mon site", "#4b3fd1", [first]);
